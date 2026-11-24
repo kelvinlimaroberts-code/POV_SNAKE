@@ -8,7 +8,7 @@
 #include "ShaderTypes.h"
 
 class MyD3D;
-class Model;
+class GameObject_t;
 
 namespace FX
 {
@@ -85,7 +85,7 @@ namespace FX
 		* pOverrideMat - IN Models and Meshes have materials controlling how they look, but we can optionally
 		*				pass one in to use instead, so we can make the model look different without altering it
 		*/
-		void Render(Model& model, Material* pOverrideMat = nullptr);
+		void Render(GameObject_t& model, Material* pOverrideMat = nullptr);
 
 		//getters
 		DirectX::SimpleMath::Matrix& GetProjectionMatrix() { return mProj; }

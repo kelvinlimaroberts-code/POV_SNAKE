@@ -102,7 +102,7 @@ bool SubMesh::Initialise(MyD3D& d3d, const aiScene* scene, const aiMesh* mesh)
 
 
 
-void Mesh::CreateFrom(const string& fileName, MyD3D& d3d)
+void Mesh_t::CreateFrom(const string& fileName, MyD3D& d3d)
 {
 	string path, fstring(fileName);
 	StripPathAndExtension(fstring, &path);
@@ -174,7 +174,7 @@ void Mesh::CreateFrom(const string& fileName, MyD3D& d3d)
 
 //******************************************************************
 
-Mesh& MeshMgr::GetMesh(const std::string& name)
+Mesh_t& MeshMgr::GetMesh(const std::string& name)
 {
 	Meshes::iterator it = mMeshes.find(name);
 	assert(it != mMeshes.end());
@@ -182,12 +182,12 @@ Mesh& MeshMgr::GetMesh(const std::string& name)
 }
 
 
-Mesh& MeshMgr::CreateMesh(const std::string& name)
+Mesh_t& MeshMgr::CreateMesh(const std::string& name)
 {
 	Meshes::iterator it = mMeshes.find(name);
 	assert(it == mMeshes.end());
 
-	Mesh *p = new Mesh(name);
+	Mesh_t *p = new Mesh_t(name);
 	mMeshes[name] = p;
 	return *p;
 }
@@ -199,14 +199,14 @@ void MeshMgr::Release()
 	mMeshes.clear();
 }
 
-void Mesh::Release()
+void Mesh_t::Release()
 {
 	for (int i = 0; i < (int)mSubMeshes.size(); ++i)
 		delete mSubMeshes[i];
 	mSubMeshes.clear();
 }
 
-void Mesh::CreateFrom(const VertexPosNormTex verts[], int numVerts, const unsigned int indices[], int numIndices, 
+void Mesh_t::CreateFrom(const VertexPosNormTex verts[], int numVerts, const unsigned int indices[], int numIndices, 
 	const Material& mat, int meshStartIndex, int meshNumIndices)
 {
 	Release();

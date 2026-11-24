@@ -359,7 +359,7 @@ namespace FX
 			ReleaseCOM(mpRasterStates[i]);
 	}
 
-	void MyFX::Render(Model& model, Material* pOverrideMat)
+	void MyFX::Render(GameObject_t& model, Material* pOverrideMat)
 	{
 		//setup shaders
 		mD3D.GetDeviceCtx().VSSetShader(mpVS, nullptr, 0);
@@ -368,7 +368,7 @@ namespace FX
 		model.GetWorldMatrix(w);
 		SetPerObjConsts(mD3D.GetDeviceCtx(), w);
 
-		Mesh& mesh = model.GetMesh();
+		Mesh_t& mesh = model.GetMesh();
 		for (int i = 0; i < mesh.GetNumSubMeshes(); ++i)
 		{
 			//update material

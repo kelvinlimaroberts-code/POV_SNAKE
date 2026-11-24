@@ -42,11 +42,11 @@ different materials (colour or textures) it needs to be
 rendered on material at a time, so the buffer is split
 into different parts.
 */
-class Mesh
+class Mesh_t
 {
 public:
-	Mesh(const std::string& name) : mName(name) {}
-	~Mesh() { 
+	Mesh_t(const std::string& name) : mName(name) {}
+	~Mesh_t() { 
 		Release(); 
 	}
 	void Release();
@@ -79,8 +79,8 @@ public:
 
 
 private:
-	Mesh(const Mesh& m) = delete;
-	Mesh& operator=(const Mesh& m) = delete;
+	Mesh_t(const Mesh_t& m) = delete;
+	Mesh_t& operator=(const Mesh_t& m) = delete;
 	//a mesh can contain multiple surfaces (geometry), each surface having 
 	//potentially different material properties
 	std::vector<SubMesh*> mSubMeshes;
@@ -99,13 +99,13 @@ public:
 	}
 	void Release();
 	//look up a mesh by name
-	Mesh& GetMesh(const std::string& name);
+	Mesh_t& GetMesh(const std::string& name);
 	//create a new mesh in the library with the given name
-	Mesh& CreateMesh(const std::string& name);
+	Mesh_t& CreateMesh(const std::string& name);
 
 	//array of meshes - a clever array where you can look things up with a key
 	//and in this case the key is a string
-	typedef std::unordered_map<std::string, Mesh*> Meshes;
+	typedef std::unordered_map<std::string, Mesh_t*> Meshes;
 	Meshes mMeshes;
 };
 

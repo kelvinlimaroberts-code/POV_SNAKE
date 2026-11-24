@@ -8,7 +8,7 @@
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
-Mesh& BuildQuad(MeshMgr& mgr)
+Mesh_t& BuildQuad(MeshMgr& mgr)
 {
 	// Create vertex buffer
 	VertexPosNormTex vertices[] =
@@ -25,7 +25,7 @@ Mesh& BuildQuad(MeshMgr& mgr)
 		0, 1, 2,
 		0, 2, 3
 	};
-	Mesh &mesh = mgr.CreateMesh("quad");
+	Mesh_t &mesh = mgr.CreateMesh("quad");
 	Material mat = Material::default;
 	mat.gfxData.Diffuse = Vector4(1, 1, 1, 1);
 	mat.gfxData.Ambient = Vector4(0.1f, 0.1f, 0.1f, 1);
@@ -35,7 +35,7 @@ Mesh& BuildQuad(MeshMgr& mgr)
 	return mesh;
 }
 
-Mesh& BuildPyramid(MeshMgr& mgr)
+Mesh_t& BuildPyramid(MeshMgr& mgr)
 {
 	// Create vertex buffer
 	VertexPosNormTex vertices[] =
@@ -76,7 +76,7 @@ Mesh& BuildPyramid(MeshMgr& mgr)
 		vertices[idx].Norm = vertices[idx + 1].Norm = vertices[idx + 2].Norm = b.Cross(a);
 	}
 
-	Mesh &mesh = mgr.CreateMesh("pyramid");
+	Mesh_t &mesh = mgr.CreateMesh("pyramid");
 	Material mat = Material::default;
 	mat.gfxData.Diffuse = Vector4(1, 1, 1, 1);
 	mat.gfxData.Ambient = Vector4(0.1f, 0.1f, 0.1f, 1);
@@ -85,7 +85,7 @@ Mesh& BuildPyramid(MeshMgr& mgr)
 	return mesh;
 }
 
-Mesh& BuildCube(MeshMgr& mgr)
+Mesh_t& BuildCube(MeshMgr& mgr)
 {
 	// Create vertex buffer
 	VertexPosNormTex vertices[] =
@@ -143,7 +143,7 @@ Mesh& BuildCube(MeshMgr& mgr)
 		20, 22, 23
 	};
 
-	Mesh &mesh = mgr.CreateMesh("box");
+	Mesh_t &mesh = mgr.CreateMesh("box");
 	Material mat = Material::default;
 	mat.gfxData.Diffuse = Vector4(1, 1, 1, 1);
 	mat.gfxData.Ambient = Vector4(0.1f, 0.1f, 0.1f, 1);
@@ -152,7 +152,7 @@ Mesh& BuildCube(MeshMgr& mgr)
 	return mesh;
 }
 
-Mesh& BuildSphere(MeshMgr& mgr, int LatLines, int LongLines)
+Mesh_t& BuildSphere(MeshMgr& mgr, int LatLines, int LongLines)
 {
 	int NumSphereVertices = ((LatLines - 2) * LongLines) + 2;
 	int NumSphereFaces = ((LatLines - 3)*(LongLines)* 2) + (LongLines * 2);
@@ -238,7 +238,7 @@ Mesh& BuildSphere(MeshMgr& mgr, int LatLines, int LongLines)
 	indices[k + 2] = (NumSphereVertices - 1) - LongLines;
 	indices[k + 1] = NumSphereVertices - 2;
 
-	Mesh &mesh = mgr.CreateMesh("sphere");
+	Mesh_t &mesh = mgr.CreateMesh("sphere");
 	Material mat = Material::default;
 	mat.gfxData.Diffuse = Vector4(0.1f, 0.1f, 0.1f, 1);
 	mat.gfxData.Specular = Vector4(1,1,1,10);

@@ -48,8 +48,8 @@ public:
 	DirectX::SimpleMath::Vector3 mCamPos = DirectX::SimpleMath::Vector3(0, 2, -5);
 
 	//stick all models in a vector and use an enum to index them
-	std::vector<Model> mModels;
-	enum Modelid { FLOOR, BACK_WALL, LEFT_WALL, BOX, CROSS, CROSS2, WINDOW, WINDOW2, DRAGON, OTHER, TOTAL }; 
+	std::vector<GameObject_t> mGameObjects;
+	enum GameObjectID { FLOOR, BACK_WALL, LEFT_WALL, BOX, CROSS, CROSS2, WINDOW, WINDOW2, DRAGON, OTHER, TOTAL }; 
 
 private:
 
@@ -69,7 +69,7 @@ private:
 	Snake_t player;
 
 	//load all models
-	void Load();
+	void LoadGameObjects();
 	//separate out in-game rendering
 	void RenderGame(float dTime);
 
