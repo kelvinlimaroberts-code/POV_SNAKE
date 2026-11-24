@@ -115,6 +115,7 @@
     <ClCompile Include="WindowUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Contants.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="D3DUtil.h" />
     <ClInclude Include="FX.h" />
