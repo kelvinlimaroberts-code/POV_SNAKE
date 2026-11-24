@@ -125,6 +125,27 @@ void Game::Load()
 
 void Game::Initialise()
 {
+	srand(time(0));   //generate seed
+	//identify GRID items ON INIT
+		//IDENTIFY walls
+	for (short y = 0; y < gridSize; y++) //fill first and last rows as walls (y)
+	{
+		map.IdentifyAsItem(WALL, { 0, y });
+		map.IdentifyAsItem(WALL, { gridSize - 1, y });
+	}
+	for (short x = 1; x < gridSize; x++) //fill first and last columns as walls (x)
+	{
+		map.IdentifyAsItem(WALL, { x, 0 });
+		map.IdentifyAsItem(WALL, { x, gridSize - 1 });
+	}
+
+	//place player
+	player.MoveSnake({ (gridSize - 2) / 2, (gridSize - 2) / 2 }, map);
+
+	//place apple
+	RegenerateApple();
+
+
 	//create objects for font rendering
 	MyD3D& d3d = WinUtil::Get().GetD3D();
 	mpFontBatch = new SpriteBatch(&d3d.GetDeviceCtx());
@@ -146,20 +167,34 @@ void Game::Release()
 
 void Game::Update(float dTime)
 {
-	//spin things around
-	mAngle += dTime * 0.5f;
-	mModels[Modelid::BOX].GetRotation().y = mAngle;
+	////spin things around
+	//mAngle += dTime * 0.5f;
+	//mModels[Modelid::BOX].GetRotation().y = mAngle;
 
-	mModels[Modelid::CROSS].GetRotation().y = -mAngle;
-	mModels[Modelid::CROSS2].GetRotation().y = -mAngle;
+	//mModels[Modelid::CROSS].GetRotation().y = -mAngle;
+	//mModels[Modelid::CROSS2].GetRotation().y = -mAngle;
 
-	mModels[Modelid::WINDOW].GetRotation().y = -mAngle * 0.5f;
-	mModels[Modelid::WINDOW2].GetRotation().y = -mAngle * 0.5f;
+	//mModels[Modelid::WINDOW].GetRotation().y = -mAngle * 0.5f;
+	//mModels[Modelid::WINDOW2].GetRotation().y = -mAngle * 0.5f;
 
 
-	mModels[Modelid::DRAGON].GetRotation().y = mAngle * 2;
-	mModels[Modelid::OTHER].GetRotation().y = -mAngle * 2;
-
+	//mModels[Modelid::DRAGON].GetRotation().y = mAngle * 2;
+	//mModels[Modelid::OTHER].GetRotation().y = -mAngle * 2;
+	if (GameIsRunning())
+	{
+		TakeInputKey();
+		short2 nextPos = { 0,0 };
+		if (player.ValidSnakeMovement(nextPos))
+		{
+			FactorCollisions(nextPos);
+			player.MoveSnake(nextPos, map);
+		}
+	}
+	else
+	{
+		OutputDeathMessage();
+	}
+	
 }
 
 void Game::Render(float dTime)
@@ -181,16 +216,16 @@ void Game::RenderGame(float dTime)
 	Matrix w = Matrix::CreateRotationY(sinf(mAngle));
 	d3d.GetFX().SetPerObjConsts(d3d.GetDeviceCtx(), w);
 
-	//main cube - forced transparency under pogram control (blend factors)
-	//update the blend factors and add some spinning spot lights
-	Vector3 dir = Vector3(1, 0, 0);
-	Matrix m = Matrix::CreateRotationY(mAngle);
-	dir = dir.TransformNormal(dir, m);
-	d3d.GetFX().SetupSpotLight(1, true, mModels[Modelid::BOX].GetPosition(), dir, Vector3(0.2f, 0.05f, 0.05f), Vector3(0.01f, 0.01f, 0.01f), Vector3(0.01f, 0.01f, 0.01f));
-	dir *= -1;
-	d3d.GetFX().SetupSpotLight(2, true, mModels[Modelid::BOX].GetPosition(), dir, Vector3(0.05f, 0.2f, 0.05f), Vector3(0.01f, 0.01f, 0.01f), Vector3(0.01f, 0.01f, 0.01f));
-	float d = sinf(mAngle)*0.5f + 0.5f;
-	mModels[Modelid::BOX].HasOverrideMat()->SetBlendFactors(d, d, d, 1);
+	////main cube - forced transparency under pogram control (blend factors)
+	////update the blend factors and add some spinning spot lights
+	//Vector3 dir = Vector3(1, 0, 0);
+	//Matrix m = Matrix::CreateRotationY(mAngle);
+	//dir = dir.TransformNormal(dir, m);
+	//d3d.GetFX().SetupSpotLight(1, true, mModels[Modelid::BOX].GetPosition(), dir, Vector3(0.2f, 0.05f, 0.05f), Vector3(0.01f, 0.01f, 0.01f), Vector3(0.01f, 0.01f, 0.01f));
+	//dir *= -1;
+	//d3d.GetFX().SetupSpotLight(2, true, mModels[Modelid::BOX].GetPosition(), dir, Vector3(0.05f, 0.2f, 0.05f), Vector3(0.01f, 0.01f, 0.01f), Vector3(0.01f, 0.01f, 0.01f));
+	//float d = sinf(mAngle)*0.5f + 0.5f;
+	//mModels[Modelid::BOX].HasOverrideMat()->SetBlendFactors(d, d, d, 1);
 
 	//render all models
 	for (auto& mod : mModels)
@@ -242,3 +277,116 @@ LRESULT Game::WindowsMssgHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 	return WinUtil::Get().DefaultMssgHandler(hwnd, msg, wParam, lParam);
 }
 
+
+void Game::TakeInputKey()
+{
+	//std::cin >> lastKeyPress;
+	DirectionValue desiredDir = player.GetDirection();
+	switch ((InputValue)lastKeyPress)
+	{
+	case INPUT_A:
+	case INPUT_a:
+		desiredDir = LEFT_DIR;
+		break;
+	case INPUT_D:
+	case INPUT_d:
+		desiredDir = RIGHT_DIR;
+		break;
+	case INPUT_S:
+	case INPUT_s:
+		desiredDir = DOWN_DIR;
+		break;
+	case INPUT_W:
+	case INPUT_w:
+		desiredDir = UP_DIR;
+		break;
+	default:
+		break;
+	}
+	switch (player.GetDirection())
+	{
+	case UP_DIR:
+		if (desiredDir != DOWN_DIR)
+		{
+			player.GetDirection() = desiredDir;
+		}
+		break;
+	case LEFT_DIR:
+		if (desiredDir != RIGHT_DIR)
+		{
+			player.GetDirection() = desiredDir;
+		}
+		break;
+	case RIGHT_DIR:
+		if (desiredDir != LEFT_DIR)
+		{
+			player.GetDirection() = desiredDir;
+		}
+		break;
+	case DOWN_DIR:
+		if (desiredDir != UP_DIR)
+		{
+			player.GetDirection() = desiredDir;
+		}
+		break;
+	default:
+		player.GetDirection() = desiredDir;
+		break;
+	}
+}
+
+void Game::OutputDeathMessage()
+{
+	//std::cout << "you died. rip bozo. score = " << player.GetScore();
+}
+
+bool Game::GameIsRunning()
+{
+	return player.HasLife();
+}
+
+
+void Game::FactorCollisions(short2 nextPos)
+{
+	//now check collisions between things
+		//check wall collision
+	switch (map.GetIdentityOfItem(nextPos))
+	{
+	case WALL:
+		player.HasLife() = false;
+		break;
+	case APPLE:
+		map.UnidentifyItem(nextPos);
+		++player;
+		player.IncrementScore();
+		map.AppleEaten() = true;
+		RegenerateApple();
+		break;
+	case SNAKE_BODY:
+		player.HasLife() = false;
+		break;
+	}
+}
+
+
+
+void Game::GenerateRandomPos(short2& pos)
+{
+	//return x and y as a value between 1 and gridSize-1
+	pos.x = (rand() % gridSize - 1) + 1;
+	pos.y = (rand() % gridSize - 1) + 1;
+}
+
+void Game::RegenerateApple()
+{
+	if (map.AppleEaten())
+	{
+		map.AppleEaten() = false;
+		short2 applePos = { 1,1 };
+		do
+		{
+			GenerateRandomPos(applePos);
+		} while (map.GetIdentityOfItem(applePos) != GridItem::EMPTY);  // make sure that the desired new position for the apple is in an empty spot
+		map.IdentifyAsItem(APPLE, applePos);
+	}
+}

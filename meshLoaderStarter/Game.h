@@ -1,5 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
+#include <cstdlib>      //for random
+#include <ctime>        //for seed
 
 #include <future>
 #include "SpriteBatch.h"
@@ -9,9 +11,24 @@
 #include "Model.h"
 #include "singleton.h"
 
-/*
-Display a small scene and spin some models around
-*/
+
+#include "Snake.h"
+
+enum InputValue
+{
+	INPUT_NONE,
+	INPUT_A = 65,
+	INPUT_D = 68,
+	INPUT_S = 83,
+	INPUT_W = 87,
+
+	INPUT_a = 97,
+	INPUT_d = 100,
+	INPUT_s = 115,
+	INPUT_w = 119
+};
+
+
 class Game : public Singleton<Game>
 {
 public:
@@ -42,10 +59,28 @@ private:
 	DirectX::SpriteBatch *mpFontBatch = nullptr;
 	DirectX::SpriteFont *mpFont = nullptr;
 
+	//meber variables from prototpye
+	//map
+	Map_t map;
+	//inputs
+	char lastKeyPress = ' ';
+	InputValue lastValidInput = INPUT_NONE;
+	//player
+	Snake_t player;
+
 	//load all models
 	void Load();
 	//separate out in-game rendering
 	void RenderGame(float dTime);
+
+	//member function from 
+
+	void TakeInputKey();		//needs editing
+	void OutputDeathMessage();  //needs editing
+	bool GameIsRunning();
+	void FactorCollisions(short2 nextPos);
+	void GenerateRandomPos(short2&);
+	void RegenerateApple();
 };
 
 #endif

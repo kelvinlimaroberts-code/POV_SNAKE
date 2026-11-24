@@ -7,7 +7,6 @@ GameManager_t::GameManager_t()
 {
     srand(time(0));   //generate seed
     //identify GRID items ON INIT
-  
     //IDENTIFY walls
     for (short y = 0; y < gridSize; y++) //fill first and last rows as walls (y)
     {
@@ -51,7 +50,7 @@ void GameManager_t::Render()
 
 }
 
-void GameManager_t::InputKey()
+void GameManager_t::TakeInputKey()
 {
     std::cin >> lastKeyPress;
     DirectionValue desiredDir = player.GetDirection();

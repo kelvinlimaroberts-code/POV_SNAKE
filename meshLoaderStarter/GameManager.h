@@ -23,7 +23,7 @@ public:
 	//~GameManager_t();
 	void Update();
 	void Render();
-	void InputKey();
+	void TakeInputKey();
 	void OutputDeathMessage();
 	bool IsGameRunning();
 private:
