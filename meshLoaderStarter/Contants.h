@@ -8,7 +8,7 @@ struct short2
 
 
 //MAP CONSTANTS
-constexpr short tileSize = 10;
+constexpr short tileSize = 1;
 
 constexpr short gridSize = 22;
 
