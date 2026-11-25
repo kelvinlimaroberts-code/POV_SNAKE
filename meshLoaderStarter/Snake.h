@@ -9,6 +9,7 @@ class Snake_t
 public:
 	Snake_t();
 	~Snake_t();
+	short2 GetPosition();
 	void MoveSnake(const short2& pos, Map_t& m);
 	bool ValidSnakeMovement(short2&);
 	void IncrementScore();

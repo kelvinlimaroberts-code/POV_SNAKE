@@ -7,6 +7,7 @@ struct short2
 };
 
 
+
 //MAP CONSTANTS
 constexpr short tileSize = 1;
 

@@ -14,6 +14,8 @@
 
 #include "Snake.h"
 
+
+
 enum InputValue
 {
 	INPUT_NONE,
@@ -82,6 +84,9 @@ private:
 	void FactorCollisions(short2 nextPos);
 	void GenerateRandomPos(short2&);
 	void RegenerateApple();
+
+	//other useful funcs
+	DirectX::SimpleMath::Vector3 Short2toVec3(short2 xy) { return DirectX::SimpleMath::Vector3(xy.x, 0, xy.y); }
 };
 
 #endif

@@ -16,6 +16,11 @@ Snake_t::~Snake_t()
 	mpHead = nullptr;
 }
 
+short2 Snake_t::GetPosition()
+{
+    return mpHead->GetPos();
+}
+
 Snake_t& Snake_t::operator++() 
 {
 	Segment_t* tail = GetTail();
