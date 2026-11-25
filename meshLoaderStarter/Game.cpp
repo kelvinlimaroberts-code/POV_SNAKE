@@ -37,8 +37,8 @@ void Game::LoadGameObjects()
 	//get a quad and cube mesh ready. also the dragon
 	Mesh_t& quadMesh = BuildQuad(d3d.GetMeshMgr());
 	Mesh_t& cubeMesh = BuildCube(d3d.GetMeshMgr());
-	Mesh_t& dragonMesh = d3d.GetMeshMgr().CreateMesh("dragon");
-	dragonMesh.CreateFrom("data/dragon/Dragon.X", d3d);
+	Mesh_t& appleMesh = d3d.GetMeshMgr().CreateMesh("apple");
+	appleMesh.CreateFrom("data/snakeStuff/apple.fbx", d3d);
 	Mesh_t& sphereMesh = d3d.GetMeshMgr().CreateMesh("sphere");
 	sphereMesh.CreateFrom("data/snakeStuff/sphere.obj", d3d);
 
@@ -94,7 +94,7 @@ void Game::LoadGameObjects()
 	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "floor.dds");
 	mat.texture = "floor.dds";
 	mGameObjects[GameObjectID::FLOOR].SetOverrideMat(&mat);
-	mGameObjects[FLOOR].SetActive();
+	mGameObjects[GameObjectID::FLOOR].SetActive();
 
 	////back wall
 	//Setup(mGameObjects[GameObjectID::BACK_WALL], quadMesh, Vector3(3, 1, 1.5f), Vector3(0, 0.5f, 3), Vector3(-PI/2, 0, 0));
@@ -110,11 +110,11 @@ void Game::LoadGameObjects()
 	//the sun
 	d3d.GetFX().SetupDirectionalLight(0, true, Vector3(-0.7f, -0.7f, 0.7f), Vector3(0.47f, 0.47f, 0.47f), Vector3(0.15f, 0.15f, 0.15f), Vector3(0.25f, 0.25f, 0.25f));
 
-	//the dragon
-	Setup(mGameObjects[GameObjectID::DRAGON], dragonMesh, 0.0005f, Vector3(0, 0, -2), Vector3(0, 0, 0));
+	//the apple
+	Setup(mGameObjects[GameObjectID::ORANGE], appleMesh, 1, Vector3(0, 0, -2), Vector3(0, 0, 0));
 	mat.gfxData.Set(Vector4(1, 0.f, 0.f, 0), Vector4(1, 0.5f, 0.5f, 0), Vector4(1, 1, 1, 1)); //red
-	mGameObjects[GameObjectID::DRAGON].SetOverrideMat(&mat);
-	mGameObjects[DRAGON].SetActive();
+	mGameObjects[GameObjectID::ORANGE].SetOverrideMat(&mat);
+	mGameObjects[GameObjectID::ORANGE].SetActive();
 
 	
 	//the segments
@@ -127,20 +127,17 @@ void Game::LoadGameObjects()
 	spec = Vector4(0.5f, 0.7f, 0.7f, 1);
 	mat.gfxData.Set(diff, amb , spec); //green
 	mGameObjects[GameObjectID::SEGMENT].SetOverrideMat(&mat);
-	mGameObjects[SEGMENT].SetActive();
+	mGameObjects[GameObjectID::SEGMENT].SetActive();
 	//set up body segments
-	for (size_t i = 1; i < TOTAL - SEGMENT; i++)
+	for (size_t i = 1; i < GameObjectID::TOTAL - GameObjectID::SEGMENT; i++)
 	{
 		Setup(mGameObjects[GameObjectID::SEGMENT + i], sphereMesh, 0.5f, Vector3(0, 1, -2), Vector3(0, 0, 0));
-		diff.z = (i / (float)(TOTAL - SEGMENT)); //make it more blue towards the end of the snake
+		diff.z = (i / (float)(GameObjectID::TOTAL - GameObjectID::SEGMENT)); //make it more blue towards the end of the snake
 		mat.gfxData.Set(diff, amb, spec); //custom colour
 		mGameObjects[GameObjectID::SEGMENT + i].SetOverrideMat(&mat);
-		mGameObjects[SEGMENT + i].GetPosition().x = i * 2;
-		mGameObjects[SEGMENT + i].SetActive();
+		mGameObjects[GameObjectID::SEGMENT + i].GetPosition().x = i * 2;
+		mGameObjects[GameObjectID::SEGMENT + i].SetActive();
 	}
-	
-
-
 
 }
 
