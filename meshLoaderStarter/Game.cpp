@@ -111,7 +111,7 @@ void Game::LoadGameObjects()
 	d3d.GetFX().SetupDirectionalLight(0, true, Vector3(-0.7f, -0.7f, 0.7f), Vector3(0.47f, 0.47f, 0.47f), Vector3(0.15f, 0.15f, 0.15f), Vector3(0.25f, 0.25f, 0.25f));
 
 	//the apple
-	Setup(mGameObjects[GameObjectID::ORANGE], appleMesh, 1, Vector3(-2, 0, 0), Vector3(0, 0, 0));
+	Setup(mGameObjects[GameObjectID::ORANGE], appleMesh, 1, Short2toVec3( applePos) , Vector3(0, 0, 0));
 	mat.gfxData.Set(Vector4(1, 0.f, 0.f, 0), Vector4(1, 0.5f, 0.5f, 0), Vector4(1, 1, 1, 1)); //red
 	mGameObjects[GameObjectID::ORANGE].SetOverrideMat(&mat);
 	mGameObjects[GameObjectID::ORANGE].SetActive();
@@ -394,12 +394,20 @@ void Game::RegenerateApple()
 	if (map.AppleEaten())
 	{
 		map.AppleEaten() = false;
-		short2 applePos = { 1,1 };
 		do
 		{
 			GenerateRandomPos(applePos);
 		} while (map.GetIdentityOfItem(applePos) != GridItem::EMPTY);  // make sure that the desired new position for the apple is in an empty spot
 		map.IdentifyAsItem(APPLE, applePos);
+
+		if (mGameObjects.size() > 0)
+		{
+			if (mGameObjects[ORANGE].GetIsActive()) //move the game object if it is active
+			{
+				mGameObjects[ORANGE].GetPosition() = Short2toVec3(applePos);
+			}
+		}
+		
 	}
 }
 

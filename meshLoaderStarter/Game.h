@@ -70,6 +70,8 @@ private:
 	InputValue lastValidInput = INPUT_NONE;
 	//player
 	Snake_t player;
+	//apple
+	short2 applePos = { 1,1 };
 
 	//load all models
 	void LoadGameObjects();
