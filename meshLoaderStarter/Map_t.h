@@ -3,6 +3,7 @@
 class Map_t
 {
 public:
+	Map_t();
 
 	GridItem GetIdentityOfItem(short2);
 	void IdentifyAsItem(GridItem item, short2);

@@ -7,18 +7,6 @@ GameManager_t::GameManager_t()
 {
     srand(time(0));   //generate seed
     //identify GRID items ON INIT
-    //IDENTIFY walls
-    for (short y = 0; y < gridSize; y++) //fill first and last rows as walls (y)
-    {
-        map.IdentifyAsItem(WALL, { 0, y });
-        map.IdentifyAsItem(WALL, { gridSize - 1, y });
-    }
-    for (short x = 1; x < gridSize; x++) //fill first and last columns as walls (x)
-    {
-        map.IdentifyAsItem(WALL, { x, 0 });
-        map.IdentifyAsItem(WALL, { x, gridSize - 1 });
-    }
-
     //place player
     player.MoveSnake({ (gridSize - 2) / 2, (gridSize - 2) / 2 }, map);
 

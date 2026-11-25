@@ -1,5 +1,20 @@
 #include "Map_t.h"
 
+Map_t::Map_t()
+{
+    //IDENTIFY walls
+    for (short y = 0; y < gridSize; y++) //fill first and last rows as walls (y)
+    {
+        IdentifyAsItem(WALL, { 0, y });
+        IdentifyAsItem(WALL, { gridSize - 1, y });
+    }
+    for (short x = 1; x < gridSize; x++) //fill first and last columns as walls (x)
+    {
+        IdentifyAsItem(WALL, { x, 0 });
+        IdentifyAsItem(WALL, { x, gridSize - 1 });
+    }
+}
+
 GridItem Map_t::GetIdentityOfItem(short2 pos)
 {
     return mapGrid[pos.x][pos.y].GetID();

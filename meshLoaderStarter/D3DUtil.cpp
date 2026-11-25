@@ -6,7 +6,7 @@
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
 
-static float gTime = 0, gElapsed = 0;
+static float gTime = 0, gElapsed = 0.1;
 
 float GetClock()
 {
