@@ -135,7 +135,7 @@ void Game::LoadGameObjects()
 		diff.z = (i / (float)(GameObjectID::TOTAL - GameObjectID::SEGMENT)); //make it more blue towards the end of the snake
 		mat.gfxData.Set(diff, amb, spec); //custom colour
 		mGameObjects[GameObjectID::SEGMENT + i].SetOverrideMat(&mat);
-		mGameObjects[GameObjectID::SEGMENT + i].GetPosition().x = i * tileSize;
+		mGameObjects[GameObjectID::SEGMENT + i].GetPosition().x += i * tileSize;
 		mGameObjects[GameObjectID::SEGMENT + i].SetActive();
 	}
 
