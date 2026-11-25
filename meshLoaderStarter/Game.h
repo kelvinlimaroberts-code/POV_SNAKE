@@ -47,13 +47,13 @@ public:
 	const DirectX::SimpleMath::Vector3 mDefCamPos = DirectX::SimpleMath::Vector3(0, 2, -5);
 	DirectX::SimpleMath::Vector3 mCamPos = DirectX::SimpleMath::Vector3(0, 2, -5);
 
-	//stick all models in a vector and use an enum to index them
+	//stick all gameObjects in a vector and use an enum to index them
 	std::vector<GameObject_t> mGameObjects;
-	enum GameObjectID { FLOOR, BACK_WALL, LEFT_WALL, BOX, CROSS, CROSS2, WINDOW, WINDOW2, DRAGON, OTHER, TOTAL }; 
+	enum GameObjectID { FLOOR,  BOX, CROSS, CROSS2, WINDOW, WINDOW2, DRAGON, SPHERE, TOTAL }; 
 
 private:
 
-	//spin some models around
+	//spin some gameObjects around
 	float mAngle = 0;
 	//printing text
 	DirectX::SpriteBatch *mpFontBatch = nullptr;

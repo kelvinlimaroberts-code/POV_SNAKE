@@ -12,18 +12,18 @@ using namespace DirectX::SimpleMath;
 * source - IN mesh to use
 * scale/pos/rot - IN
 */
-void Setup(GameObject_t& m, Mesh_t& source, const Vector3& scale, const Vector3& pos, const Vector3& rot)
+void Setup(GameObject_t& gameObj, Mesh_t& source, const Vector3& scale, const Vector3& pos, const Vector3& rot)
 {
-	m.Initialise(source);
-	m.GetScale() = scale;
-	m.GetPosition() = pos;
-	m.GetRotation() = rot;
+	gameObj.Initialise(source);
+	gameObj.GetScale() = scale;
+	gameObj.GetPosition() = pos;
+	gameObj.GetRotation() = rot;
 }
 
 //same as above, but most of the time we want a uniform scale
-void Setup(GameObject_t& m, Mesh_t& source, float scale, const Vector3& pos, const Vector3& rot)
+void Setup(GameObject_t& gameObj, Mesh_t& source, float scale, const Vector3& pos, const Vector3& rot)
 {
-	Setup(m, source, Vector3(scale, scale, scale), pos, rot);
+	Setup(gameObj, source, Vector3(scale, scale, scale), pos, rot);
 }
 
 
@@ -37,16 +37,17 @@ void Game::LoadGameObjects()
 	//get a quad and cube mesh ready. also the dragon
 	Mesh_t& quadMesh = BuildQuad(d3d.GetMeshMgr());
 	Mesh_t& cubeMesh = BuildCube(d3d.GetMeshMgr());
-	Mesh_t& sm = d3d.GetMeshMgr().CreateMesh("dragon");
-	Mesh_t& otherMesh = d3d.GetMeshMgr().CreateMesh("other");
+	Mesh_t& dragonMesh = d3d.GetMeshMgr().CreateMesh("dragon");
+	Mesh_t& sphereMesh = d3d.GetMeshMgr().CreateMesh("sphere");
 
+	Material mat; //a temporary place to hold material data when we are initialising
 
 
 	//textured lit box
 	mGameObjects[GameObjectID::BOX].Initialise(cubeMesh);
 	mGameObjects[GameObjectID::BOX].GetPosition() = Vector3(0, -0.5f, 1);
 	mGameObjects[GameObjectID::BOX].GetScale() = Vector3(0.5f, 0.5f, 0.5f);
-	Material mat = mGameObjects[3].GetMesh().GetSubMesh(0).material;
+	mat = mGameObjects[3].GetMesh().GetSubMesh(0).material;
 	mat.gfxData.Set(Vector4(0.5, 0.5, 0.5, 1), Vector4(1, 1, 1, 0), Vector4(1, 1, 1, 1));
 	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "tiles.dds");
 	mat.texture = "tiles.dds";
@@ -92,33 +93,33 @@ void Game::LoadGameObjects()
 	mat.texture = "floor.dds";
 	mGameObjects[GameObjectID::FLOOR].SetOverrideMat(&mat);
 
-	//back wall
-	Setup(mGameObjects[GameObjectID::BACK_WALL], quadMesh, Vector3(3, 1, 1.5f), Vector3(0, 0.5f, 3), Vector3(-PI/2, 0, 0));
-	mat.gfxData.Set(Vector4(1, 1, 1, 0), Vector4(1, 1, 1, 0), Vector4(1, 1, 1, 1));
-	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(),"wall.dds");
-	mat.texture = "wall.dds";
-	mGameObjects[GameObjectID::BACK_WALL].SetOverrideMat(&mat);
+	////back wall
+	//Setup(mGameObjects[GameObjectID::BACK_WALL], quadMesh, Vector3(3, 1, 1.5f), Vector3(0, 0.5f, 3), Vector3(-PI/2, 0, 0));
+	//mat.gfxData.Set(Vector4(1, 1, 1, 0), Vector4(1, 1, 1, 0), Vector4(1, 1, 1, 1));
+	//mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(),"wall.dds");
+	//mat.texture = "wall.dds";
+	//mGameObjects[GameObjectID::BACK_WALL].SetOverrideMat(&mat);
 
-	//left wall
-	Setup(mGameObjects[GameObjectID::LEFT_WALL], quadMesh, Vector3(3, 1, 1.5f), Vector3(-3, 0.5f, 0), Vector3(-PI/2, -PI/2, 0));
-	mGameObjects[GameObjectID::LEFT_WALL].SetOverrideMat(&mat);
+	////left wall
+	//Setup(mGameObjects[GameObjectID::LEFT_WALL], quadMesh, Vector3(3, 1, 1.5f), Vector3(-3, 0.5f, 0), Vector3(-PI/2, -PI/2, 0));
+	//mGameObjects[GameObjectID::LEFT_WALL].SetOverrideMat(&mat);
 
 	//the sun
 	d3d.GetFX().SetupDirectionalLight(0, true, Vector3(-0.7f, -0.7f, 0.7f), Vector3(0.47f, 0.47f, 0.47f), Vector3(0.15f, 0.15f, 0.15f), Vector3(0.25f, 0.25f, 0.25f));
 
 	//the dragon
-	sm.CreateFrom("data/dragon/Dragon.X", d3d);
-	Setup(mGameObjects[GameObjectID::DRAGON], sm, 0.0005f, Vector3(0, 0, -2), Vector3(0, 0, 0));
+	dragonMesh.CreateFrom("data/dragon/Dragon.X", d3d);
+	Setup(mGameObjects[GameObjectID::DRAGON], dragonMesh, 0.0005f, Vector3(0, 0, -2), Vector3(0, 0, 0));
+	mat.gfxData.Set(Vector4(1, 0.f, 0.f, 0), Vector4(1, 0.5f, 0.5f, 0), Vector4(1, 1, 1, 1)); //red
+	mGameObjects[GameObjectID::DRAGON].SetOverrideMat(&mat);
+
 	
-
-	//the other one (DJ Kahlid)
-	otherMesh.CreateFrom("data/snakeStuff/sphere.obj", d3d);
-	Setup(mGameObjects[GameObjectID::OTHER], otherMesh, 0.5f, Vector3(0, 1, -2), Vector3(0, 0, 0));
-
-	mat = mGameObjects[GameObjectID::OTHER].GetMesh().GetSubMesh(0).material;
-	//mat.gfxData.Set(Vector4(1, 0.f, 0.f, 0), Vector4(1, 0.5f, 0.5f, 0), Vector4(1, 1, 1, 1)); //red
+	//the sphere (DJ Kahlid)
+	sphereMesh.CreateFrom("data/snakeStuff/sphere.obj", d3d);
+	Setup(mGameObjects[GameObjectID::SPHERE], sphereMesh, 0.5f, Vector3(0, 1, -2), Vector3(0, 0, 0));
+	mat = mGameObjects[GameObjectID::SPHERE].GetMesh().GetSubMesh(0).material;
 	mat.gfxData.Set(Vector4(0.2f, 0.9f, 0.2f, 0), Vector4(0.4f, 0.9f, 0.7f, 0), Vector4(0.5f, 0.7f, 0.7f, 1)); //green
-	mGameObjects[GameObjectID::OTHER].SetOverrideMat(&mat);
+	mGameObjects[GameObjectID::SPHERE].SetOverrideMat(&mat);
 
 
 }
@@ -127,21 +128,8 @@ void Game::Initialise()
 {
 	srand(time(0));   //generate seed
 	//identify GRID items ON INIT
-		//IDENTIFY walls
-	for (short y = 0; y < gridSize; y++) //fill first and last rows as walls (y)
-	{
-		map.IdentifyAsItem(WALL, { 0, y });
-		map.IdentifyAsItem(WALL, { gridSize - 1, y });
-	}
-	for (short x = 1; x < gridSize; x++) //fill first and last columns as walls (x)
-	{
-		map.IdentifyAsItem(WALL, { x, 0 });
-		map.IdentifyAsItem(WALL, { x, gridSize - 1 });
-	}
-
 	//place player
 	player.MoveSnake({ (gridSize - 2) / 2, (gridSize - 2) / 2 }, map);
-
 	//place apple
 	RegenerateApple();
 
@@ -152,6 +140,7 @@ void Game::Initialise()
 	assert(mpFontBatch);
 	mpFont = new SpriteFont(&d3d.GetDevice(), L"../bin/data/fonts/algerian.spritefont");
 	assert(mpFont);
+
 
 	LoadGameObjects();
 }
@@ -227,9 +216,9 @@ void Game::RenderGame(float dTime)
 	//float d = sinf(mAngle)*0.5f + 0.5f;
 	//mModels[Modelid::BOX].HasOverrideMat()->SetBlendFactors(d, d, d, 1);
 
-	//render all models
-	for (auto& mod : mGameObjects)
-		d3d.GetFX().Render(mod);
+	//render all game objects
+	for (auto& gameObject : mGameObjects)
+		d3d.GetFX().Render(gameObject);
 
 	d3d.EndRender();
 }
