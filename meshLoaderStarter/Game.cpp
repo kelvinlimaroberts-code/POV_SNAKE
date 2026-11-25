@@ -38,7 +38,9 @@ void Game::LoadGameObjects()
 	Mesh_t& quadMesh = BuildQuad(d3d.GetMeshMgr());
 	Mesh_t& cubeMesh = BuildCube(d3d.GetMeshMgr());
 	Mesh_t& dragonMesh = d3d.GetMeshMgr().CreateMesh("dragon");
+	dragonMesh.CreateFrom("data/dragon/Dragon.X", d3d);
 	Mesh_t& sphereMesh = d3d.GetMeshMgr().CreateMesh("sphere");
+	sphereMesh.CreateFrom("data/snakeStuff/sphere.obj", d3d);
 
 	Material mat; //a temporary place to hold material data when we are initialising
 
@@ -109,20 +111,34 @@ void Game::LoadGameObjects()
 	d3d.GetFX().SetupDirectionalLight(0, true, Vector3(-0.7f, -0.7f, 0.7f), Vector3(0.47f, 0.47f, 0.47f), Vector3(0.15f, 0.15f, 0.15f), Vector3(0.25f, 0.25f, 0.25f));
 
 	//the dragon
-	dragonMesh.CreateFrom("data/dragon/Dragon.X", d3d);
 	Setup(mGameObjects[GameObjectID::DRAGON], dragonMesh, 0.0005f, Vector3(0, 0, -2), Vector3(0, 0, 0));
 	mat.gfxData.Set(Vector4(1, 0.f, 0.f, 0), Vector4(1, 0.5f, 0.5f, 0), Vector4(1, 1, 1, 1)); //red
 	mGameObjects[GameObjectID::DRAGON].SetOverrideMat(&mat);
 	mGameObjects[DRAGON].SetActive();
 
 	
-	//the sphere (DJ Kahlid)
-	sphereMesh.CreateFrom("data/snakeStuff/sphere.obj", d3d);
+	//the segments
+	//set up head segment
 	Setup(mGameObjects[GameObjectID::SEGMENT], sphereMesh, 0.5f, Vector3(0, 1, -2), Vector3(0, 0, 0));
 	mat = mGameObjects[GameObjectID::SEGMENT].GetMesh().GetSubMesh(0).material;
-	mat.gfxData.Set(Vector4(0.2f, 0.9f, 0.2f, 0), Vector4(0.4f, 0.9f, 0.7f, 0), Vector4(0.5f, 0.7f, 0.7f, 1)); //green
+	Vector4 diff, amb, spec;
+	diff = Vector4(0.2f, 0.9f, 0.2f, 0);
+	amb = Vector4(0.4f, 0.9f, 0.7f, 0);
+	spec = Vector4(0.5f, 0.7f, 0.7f, 1);
+	mat.gfxData.Set(diff, amb , spec); //green
 	mGameObjects[GameObjectID::SEGMENT].SetOverrideMat(&mat);
 	mGameObjects[SEGMENT].SetActive();
+	//set up body segments
+	for (size_t i = 1; i < TOTAL - SEGMENT; i++)
+	{
+		Setup(mGameObjects[GameObjectID::SEGMENT + i], sphereMesh, 0.5f, Vector3(0, 1, -2), Vector3(0, 0, 0));
+		diff.z = (i / (float)(TOTAL - SEGMENT)); //make it more blue towards the end of the snake
+		mat.gfxData.Set(diff, amb, spec); //custom colour
+		mGameObjects[GameObjectID::SEGMENT + i].SetOverrideMat(&mat);
+		mGameObjects[SEGMENT + i].GetPosition().x = i * 2;
+		mGameObjects[SEGMENT + i].SetActive();
+	}
+	
 
 
 

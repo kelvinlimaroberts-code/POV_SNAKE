@@ -50,7 +50,7 @@ public:
 	//stick all gameObjects in a vector and use an enum to index them
 	std::vector<GameObject_t> mGameObjects;
 	static constexpr int TotalSegments = 8;
-	enum GameObjectID { FLOOR, DRAGON, SEGMENT, TOTAL = SEGMENT + TotalSegments };
+	enum GameObjectID { FLOOR, DRAGON, SEGMENT, TOTAL = SEGMENT + TotalSegments }; //always have segment as the penultimate for this logic to work
 
 private:
 
