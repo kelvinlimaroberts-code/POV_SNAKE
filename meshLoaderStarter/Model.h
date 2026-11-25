@@ -19,6 +19,8 @@ public:
 	//setup using the given mesh
 	void Initialise(Mesh_t& mesh);
 
+	void SetActive(bool activate = true) { mIsActive = activate; }
+	bool GetIsActive() { return mIsActive; }
 	//get and optionally set pos/scale/rotation
 	DirectX::SimpleMath::Vector3& GetPosition() { return mPosition; }
 	DirectX::SimpleMath::Vector3& GetScale() { return mScale; }
@@ -26,18 +28,18 @@ public:
 	//build a matrix from the euler angles, pos and scale
 	//note that this hard codes a concatenation order that you might not want
 	void GetWorldMatrix(DirectX::SimpleMath::Matrix& w);
-	//get the mesh this model is using
+	//get the mesh this game object is using
 	Mesh_t& GetMesh() {
 		assert(mpMesh);
 		return *mpMesh;
 	}
-	//has this model been configured to use a custom material
+	//has this game object been configured to use a custom material
 	Material* HasOverrideMat() {
 		if (mUseOverrideMat)
 			return &mOverrideMaterial;
 		return nullptr;
 	}
-	//tell the model to use a custom material (take a copy of it) or stop using one
+	//tell the game object to use a custom material (take a copy of it) or stop using one
 	void SetOverrideMat(Material* pMat = nullptr) {
 		if (!pMat) {
 			mUseOverrideMat = false;
@@ -46,13 +48,14 @@ public:
 		mUseOverrideMat = true;
 		mOverrideMaterial = *pMat;
 	}
-	//copy a model
-	GameObject_t& operator=(const GameObject_t& m)
+	//copy a game object
+	GameObject_t& operator=(const GameObject_t& otherGameObj)
 	{
-		mpMesh = m.mpMesh;
-		mPosition = m.mPosition;
-		mScale = m.mScale;
-		mRotation = m.mRotation;
+		mpMesh = otherGameObj.mpMesh;
+		mPosition = otherGameObj.mPosition;
+		mScale = otherGameObj.mScale;
+		mRotation = otherGameObj.mRotation;
+		mIsActive = otherGameObj.mIsActive;
 		return *this;
 	}
 private:
@@ -61,6 +64,7 @@ private:
 	DirectX::SimpleMath::Vector3 mPosition, mScale, mRotation;	//positon, scale and orientation
 	Material mOverrideMaterial;		//an alternate material to the one in the Mesh
 	bool mUseOverrideMat = false;	//should we actually be using it?
+	bool mIsActive = false;
 };
 
 #endif

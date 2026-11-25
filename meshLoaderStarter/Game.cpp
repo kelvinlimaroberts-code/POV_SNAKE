@@ -92,6 +92,7 @@ void Game::LoadGameObjects()
 	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "floor.dds");
 	mat.texture = "floor.dds";
 	mGameObjects[GameObjectID::FLOOR].SetOverrideMat(&mat);
+	mGameObjects[FLOOR].SetActive();
 
 	////back wall
 	//Setup(mGameObjects[GameObjectID::BACK_WALL], quadMesh, Vector3(3, 1, 1.5f), Vector3(0, 0.5f, 3), Vector3(-PI/2, 0, 0));
@@ -112,14 +113,17 @@ void Game::LoadGameObjects()
 	Setup(mGameObjects[GameObjectID::DRAGON], dragonMesh, 0.0005f, Vector3(0, 0, -2), Vector3(0, 0, 0));
 	mat.gfxData.Set(Vector4(1, 0.f, 0.f, 0), Vector4(1, 0.5f, 0.5f, 0), Vector4(1, 1, 1, 1)); //red
 	mGameObjects[GameObjectID::DRAGON].SetOverrideMat(&mat);
+	mGameObjects[DRAGON].SetActive();
 
 	
 	//the sphere (DJ Kahlid)
 	sphereMesh.CreateFrom("data/snakeStuff/sphere.obj", d3d);
-	Setup(mGameObjects[GameObjectID::SPHERE], sphereMesh, 0.5f, Vector3(0, 1, -2), Vector3(0, 0, 0));
-	mat = mGameObjects[GameObjectID::SPHERE].GetMesh().GetSubMesh(0).material;
+	Setup(mGameObjects[GameObjectID::SEGMENT], sphereMesh, 0.5f, Vector3(0, 1, -2), Vector3(0, 0, 0));
+	mat = mGameObjects[GameObjectID::SEGMENT].GetMesh().GetSubMesh(0).material;
 	mat.gfxData.Set(Vector4(0.2f, 0.9f, 0.2f, 0), Vector4(0.4f, 0.9f, 0.7f, 0), Vector4(0.5f, 0.7f, 0.7f, 1)); //green
-	mGameObjects[GameObjectID::SPHERE].SetOverrideMat(&mat);
+	mGameObjects[GameObjectID::SEGMENT].SetOverrideMat(&mat);
+	mGameObjects[SEGMENT].SetActive();
+
 
 
 }
@@ -216,9 +220,15 @@ void Game::RenderGame(float dTime)
 	//float d = sinf(mAngle)*0.5f + 0.5f;
 	//mModels[Modelid::BOX].HasOverrideMat()->SetBlendFactors(d, d, d, 1);
 
-	//render all game objects
-	for (auto& gameObject : mGameObjects)
-		d3d.GetFX().Render(gameObject);
+	
+	//render all Active Game Objects
+	for (size_t i = 0; i < mGameObjects.size(); i++)
+	{
+		if (mGameObjects[i].GetIsActive())
+		{
+			d3d.GetFX().Render(mGameObjects[i]);
+		}
+	}
 
 	d3d.EndRender();
 }
