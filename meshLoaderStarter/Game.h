@@ -49,7 +49,7 @@ public:
 
 	//stick all gameObjects in a vector and use an enum to index them
 	std::vector<GameObject_t> mGameObjects;
-	enum GameObjectID { FLOOR,  BOX, CROSS, CROSS2, WINDOW, WINDOW2, DRAGON, SPHERE, TOTAL }; 
+	enum GameObjectID { FLOOR, DRAGON, SPHERE, TOTAL };
 
 private:
 

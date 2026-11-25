@@ -43,47 +43,47 @@ void Game::LoadGameObjects()
 	Material mat; //a temporary place to hold material data when we are initialising
 
 
-	//textured lit box
-	mGameObjects[GameObjectID::BOX].Initialise(cubeMesh);
-	mGameObjects[GameObjectID::BOX].GetPosition() = Vector3(0, -0.5f, 1);
-	mGameObjects[GameObjectID::BOX].GetScale() = Vector3(0.5f, 0.5f, 0.5f);
-	mat = mGameObjects[3].GetMesh().GetSubMesh(0).material;
-	mat.gfxData.Set(Vector4(0.5, 0.5, 0.5, 1), Vector4(1, 1, 1, 0), Vector4(1, 1, 1, 1));
-	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "tiles.dds");
-	mat.texture = "tiles.dds";
-	mat.flags |= Material::TFlags::TRANSPARENCY;	//this one uses blend factor controlled transparency
-	mat.SetBlendFactors(0.5, 0.5, 0.5, 1);
-	mGameObjects[GameObjectID::BOX].SetOverrideMat(&mat);
+	////textured lit box
+	//mGameObjects[GameObjectID::BOX].Initialise(cubeMesh);
+	//mGameObjects[GameObjectID::BOX].GetPosition() = Vector3(0, -0.5f, 1);
+	//mGameObjects[GameObjectID::BOX].GetScale() = Vector3(0.5f, 0.5f, 0.5f);
+	//mat = mGameObjects[BOX].GetMesh().GetSubMesh(0).material;
+	//mat.gfxData.Set(Vector4(0.5, 0.5, 0.5, 1), Vector4(1, 1, 1, 0), Vector4(1, 1, 1, 1));
+	//mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "tiles.dds");
+	//mat.texture = "tiles.dds";
+	//mat.flags |= Material::TFlags::TRANSPARENCY;	//this one uses blend factor controlled transparency
+	//mat.SetBlendFactors(0.5, 0.5, 0.5, 1);
+	//mGameObjects[GameObjectID::BOX].SetOverrideMat(&mat);
 
-	//cross - meant to be see through so we want two of them
-	//one is the back of the cross, the other is the front
-	mGameObjects[GameObjectID::CROSS].Initialise(cubeMesh);
-	mat.flags &= ~Material::TFlags::TRANSPARENCY;
-	mGameObjects[GameObjectID::CROSS].GetScale() = Vector3(0.5f, 0.5f, 0.5f);
-	mGameObjects[GameObjectID::CROSS].GetPosition() = Vector3(1.5f, -0.45f, 1);
-	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "cross.dds");
-	mat.texture = "cross";
-	mat.flags |= Material::TFlags::ALPHA_TRANSPARENCY;	
-	mat.flags &= ~Material::TFlags::CCW_WINDING;	//render the back
-	mGameObjects[GameObjectID::CROSS].SetOverrideMat(&mat);
+	////cross - meant to be see through so we want two of them
+	////one is the back of the cross, the other is the front
+	//mGameObjects[GameObjectID::CROSS].Initialise(cubeMesh);
+	//mat.flags &= ~Material::TFlags::TRANSPARENCY;
+	//mGameObjects[GameObjectID::CROSS].GetScale() = Vector3(0.5f, 0.5f, 0.5f);
+	//mGameObjects[GameObjectID::CROSS].GetPosition() = Vector3(1.5f, -0.45f, 1);
+	//mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "cross.dds");
+	//mat.texture = "cross";
+	//mat.flags |= Material::TFlags::ALPHA_TRANSPARENCY;	
+	//mat.flags &= ~Material::TFlags::CCW_WINDING;	//render the back
+	//mGameObjects[GameObjectID::CROSS].SetOverrideMat(&mat);
 
-	mGameObjects[GameObjectID::CROSS2] = mGameObjects[GameObjectID::CROSS];
-	mat.flags |= Material::TFlags::CCW_WINDING;	//render the front
-	mGameObjects[GameObjectID::CROSS2].SetOverrideMat(&mat);
+	//mGameObjects[GameObjectID::CROSS2] = mGameObjects[GameObjectID::CROSS];
+	//mat.flags |= Material::TFlags::CCW_WINDING;	//render the front
+	//mGameObjects[GameObjectID::CROSS2].SetOverrideMat(&mat);
 
-	//window - another see through box so we need two models
-	mGameObjects[GameObjectID::WINDOW].Initialise(cubeMesh);
-	mGameObjects[GameObjectID::WINDOW].GetScale() = Vector3(0.75f, 0.75f, 0.75f);
-	mGameObjects[GameObjectID::WINDOW].GetPosition() = Vector3(-1.75f, 0, 1.25f);
-	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "alphaWindow.dds");
-	mat.texture = "alphawindow";
-	mat.flags |= Material::TFlags::ALPHA_TRANSPARENCY;
-	mat.flags &= ~Material::TFlags::CCW_WINDING;	//render the back
-	mGameObjects[GameObjectID::WINDOW].SetOverrideMat(&mat);
+	////window - another see through box so we need two models
+	//mGameObjects[GameObjectID::WINDOW].Initialise(cubeMesh);
+	//mGameObjects[GameObjectID::WINDOW].GetScale() = Vector3(0.75f, 0.75f, 0.75f);
+	//mGameObjects[GameObjectID::WINDOW].GetPosition() = Vector3(-1.75f, 0, 1.25f);
+	//mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "alphaWindow.dds");
+	//mat.texture = "alphawindow";
+	//mat.flags |= Material::TFlags::ALPHA_TRANSPARENCY;
+	//mat.flags &= ~Material::TFlags::CCW_WINDING;	//render the back
+	//mGameObjects[GameObjectID::WINDOW].SetOverrideMat(&mat);
 
-	mGameObjects[GameObjectID::WINDOW2] = mGameObjects[GameObjectID::WINDOW];
-	mat.flags |= Material::TFlags::CCW_WINDING;	//render the front
-	mGameObjects[GameObjectID::WINDOW2].SetOverrideMat(&mat);
+	//mGameObjects[GameObjectID::WINDOW2] = mGameObjects[GameObjectID::WINDOW];
+	//mat.flags |= Material::TFlags::CCW_WINDING;	//render the front
+	//mGameObjects[GameObjectID::WINDOW2].SetOverrideMat(&mat);
 
 	//quad wood floor
 	Setup(mGameObjects[GameObjectID::FLOOR], quadMesh, Vector3(3, 1, 3), Vector3(0, -1, 0), Vector3(0, 0, 0));
