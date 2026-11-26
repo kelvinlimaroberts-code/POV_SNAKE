@@ -11,10 +11,9 @@ public:
 	Snake_t();
 	~Snake_t();
 	short2 GetPosition();
+	short2 GetPreviousPosition();
 	void MoveSnake(const short2& pos, Map_t& m);
 	bool ValidSnakeMovement(short2&);
-	void IncrementScore();
-	int GetScore();
 	bool& HasLife();
 	DirectionValue& GetDirection();
 
@@ -25,7 +24,6 @@ private:
 	Segment_t* mpHead = nullptr;
 
 	bool snakeAlive = true;
-	int score = 0;
 	DirectionValue direction = NO_DIR;
 };
 

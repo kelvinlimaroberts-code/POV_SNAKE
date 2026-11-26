@@ -71,6 +71,7 @@ private:
 	InputValue lastValidInput = INPUT_NONE;
 	//player
 	Snake_t player;
+	int score = 0;
 	//apple
 	short2 applePos = { 1,1 };
 	//game management
@@ -90,9 +91,10 @@ private:
 	void FactorCollisions(short2 nextPos);
 	void GenerateRandomPos(short2&);
 	void RegenerateApple();
+	void IncrementScore();
 
 	//other useful funcs
-	DirectX::SimpleMath::Vector3 MapPosToVec3(short2 xy) { return DirectX::SimpleMath::Vector3(-xy.y, 0, -xy.x); }
+	DirectX::SimpleMath::Vector3 MapPosToVec3(short2 xy) { return DirectX::SimpleMath::Vector3(xy.x, 0, xy.y); }
 };
 
 #endif

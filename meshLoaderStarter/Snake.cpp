@@ -21,6 +21,11 @@ short2 Snake_t::GetPosition()
     return mpHead->GetPos();
 }
 
+short2 Snake_t::GetPreviousPosition()
+{
+    return mpHead->GetPrevPos();
+}
+
 Snake_t& Snake_t::operator++() 
 {
 	Segment_t* tail = GetTail();
@@ -87,15 +92,7 @@ bool Snake_t::ValidSnakeMovement(short2& desiredNewPos)
     }
 }
 
-void Snake_t::IncrementScore()
-{
-    score++;
-}
 
-int Snake_t::GetScore()
-{
-    return score;
-}
 
 bool& Snake_t::HasLife()
 {
