@@ -47,8 +47,8 @@ public:
 	LRESULT WindowsMssgHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	//a camera we can push around the scene
-	const DirectX::SimpleMath::Vector3 mDefCamPos = DirectX::SimpleMath::Vector3(0, 2, -5);
-	DirectX::SimpleMath::Vector3 mCamPos = DirectX::SimpleMath::Vector3(0, 2, -5);
+	const DirectX::SimpleMath::Vector3 mDefCamPos = DirectX::SimpleMath::Vector3(10, 38, 0);
+	DirectX::SimpleMath::Vector3 mCamPos = DirectX::SimpleMath::Vector3(10, 38, 0);
 
 	//stick all gameObjects in a vector and use an enum to index them
 	std::vector<GameObject_t> mGameObjects;
@@ -94,7 +94,7 @@ private:
 	void IncrementScore();
 
 	//other useful funcs
-	DirectX::SimpleMath::Vector3 MapPosToVec3(short2 xy) { return DirectX::SimpleMath::Vector3(xy.x, 0, xy.y); }
+	DirectX::SimpleMath::Vector3 MapPosToVec3(short2 xy) { return DirectX::SimpleMath::Vector3(xy.x - gridSize/2, 0, xy.y-gridSize/2); }
 };
 
 #endif

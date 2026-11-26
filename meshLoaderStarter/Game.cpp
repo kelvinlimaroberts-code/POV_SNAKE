@@ -111,7 +111,7 @@ void Game::LoadGameObjects()
 	d3d.GetFX().SetupDirectionalLight(0, true, Vector3(-0.7f, -0.7f, 0.7f), Vector3(0.47f, 0.47f, 0.47f), Vector3(0.15f, 0.15f, 0.15f), Vector3(0.25f, 0.25f, 0.25f));
 
 	//the apple
-	Setup(mGameObjects[GameObjectID::ORANGE], appleMesh, 1, MapPosToVec3( applePos) , Vector3(0, 0, 0));
+	Setup(mGameObjects[GameObjectID::ORANGE], appleMesh, 1, MapPosToVec3(applePos) , Vector3(0, 0, 0));
 	mat.gfxData.Set(Vector4(1, 0.f, 0.f, 0), Vector4(1, 0.5f, 0.5f, 0), Vector4(1, 1, 1, 1)); //red
 	mGameObjects[GameObjectID::ORANGE].SetOverrideMat(&mat);
 	mGameObjects[GameObjectID::ORANGE].SetActive();
@@ -148,7 +148,6 @@ void Game::Initialise()
 	player.MoveSnake({ (gridSize - 2) / 2, (gridSize - 2) / 2 }, map);
 	//place apple
 	RegenerateApple();
-
 
 	//create objects for font rendering
 	MyD3D& d3d = WinUtil::Get().GetD3D();
