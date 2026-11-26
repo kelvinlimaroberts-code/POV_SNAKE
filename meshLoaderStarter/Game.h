@@ -80,7 +80,7 @@ private:
 
 	//member function from 
 
-	void TakeInputKey();		//needs editing
+	void TakeInputKey();		
 	void OutputDeathMessage();  //needs editing
 	bool GameIsRunning();
 	void FactorCollisions(short2 nextPos);

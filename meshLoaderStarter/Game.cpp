@@ -188,8 +188,7 @@ void Game::Update(float dTime)
 	//mModels[Modelid::OTHER].GetRotation().y = -mAngle * 2;
 	if (GameIsRunning())
 	{
-		TakeInputKey();
-		short2 nextPos = { 0,0 };
+		short2 nextPos = player.GetPosition();
 		if (player.ValidSnakeMovement(nextPos))
 		{
 			FactorCollisions(nextPos);

@@ -61,7 +61,6 @@ bool Snake_t::ValidSnakeMovement(short2& desiredNewPos)
 {
     if (direction != NO_DIR)
     {
-        desiredNewPos = mpHead->GetPos();
         switch (direction)
         {
         case UP_DIR:
