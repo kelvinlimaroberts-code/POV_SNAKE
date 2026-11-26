@@ -51,7 +51,7 @@ public:
 
 	//stick all gameObjects in a vector and use an enum to index them
 	std::vector<GameObject_t> mGameObjects;
-	static constexpr int TotalSegments = 8;
+	static constexpr int TotalSegments = gridSize*gridSize;
 	enum GameObjectID { FLOOR, ORANGE, SEGMENT, TOTAL = SEGMENT + TotalSegments }; //always have segment as the penultimate for this logic to work
 
 private:
@@ -81,7 +81,7 @@ private:
 	//member function from 
 
 	void TakeInputKey();		
-	void OutputDeathMessage();  //needs editing
+	void OutputQuitMessage();  //needs editing
 	bool GameIsRunning();
 	void FactorCollisions(short2 nextPos);
 	void GenerateRandomPos(short2&);

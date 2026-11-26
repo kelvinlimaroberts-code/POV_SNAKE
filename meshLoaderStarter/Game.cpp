@@ -197,7 +197,7 @@ void Game::Update(float dTime)
 	}
 	else
 	{
-		OutputDeathMessage();
+		OutputQuitMessage();
 	}
 	
 }
@@ -347,14 +347,22 @@ void Game::TakeInputKey()
 	}
 }
 
-void Game::OutputDeathMessage()
+void Game::OutputQuitMessage()
 {
-	//std::cout << "you died. rip bozo. score = " << player.GetScore();
+	if (player.GetScore() >= gridSize * gridSize)
+	{
+		//display you win yippee
+	}
+	else
+	{
+		//rip bozo
+		//std::cout << "game over. score = " << player.GetScore();
+	}
 }
 
 bool Game::GameIsRunning()
 {
-	return player.HasLife();
+	return player.HasLife() && player.GetScore()>=gridSize*gridSize;
 }
 
 
