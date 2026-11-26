@@ -26,7 +26,7 @@ Mesh_t& BuildQuad(MeshMgr& mgr)
 		0, 2, 3
 	};
 	Mesh_t &mesh = mgr.CreateMesh("quad");
-	Material mat = Material::default;
+	Material_t mat = Material_t::default;
 	mat.gfxData.Diffuse = Vector4(1, 1, 1, 1);
 	mat.gfxData.Ambient = Vector4(0.1f, 0.1f, 0.1f, 1);
 	mat.gfxData.Specular = Vector4(1, 1, 1, 10);
@@ -77,7 +77,7 @@ Mesh_t& BuildPyramid(MeshMgr& mgr)
 	}
 
 	Mesh_t &mesh = mgr.CreateMesh("pyramid");
-	Material mat = Material::default;
+	Material_t mat = Material_t::default;
 	mat.gfxData.Diffuse = Vector4(1, 1, 1, 1);
 	mat.gfxData.Ambient = Vector4(0.1f, 0.1f, 0.1f, 1);
 	mat.gfxData.Specular = Vector4(1,1,1,10);
@@ -144,7 +144,7 @@ Mesh_t& BuildCube(MeshMgr& mgr)
 	};
 
 	Mesh_t &mesh = mgr.CreateMesh("box");
-	Material mat = Material::default;
+	Material_t mat = Material_t::default;
 	mat.gfxData.Diffuse = Vector4(1, 1, 1, 1);
 	mat.gfxData.Ambient = Vector4(0.1f, 0.1f, 0.1f, 1);
 	mat.gfxData.Specular = Vector4(1, 1, 1, 10);
@@ -239,10 +239,10 @@ Mesh_t& BuildSphere(MeshMgr& mgr, int LatLines, int LongLines)
 	indices[k + 1] = NumSphereVertices - 2;
 
 	Mesh_t &mesh = mgr.CreateMesh("sphere");
-	Material mat = Material::default;
+	Material_t mat = Material_t::default;
 	mat.gfxData.Diffuse = Vector4(0.1f, 0.1f, 0.1f, 1);
 	mat.gfxData.Specular = Vector4(1,1,1,10);
-	mat.flags &= ~Material::TFlags::CCW_WINDING;
+	mat.flags &= ~Material_t::TFlags::CCW_WINDING;
 	mesh.CreateFrom(&vertices[0], NumSphereVertices, &indices[0], NumSphereFaces * 3, mat, 0, NumSphereFaces * 3);
 	return mesh;
 }

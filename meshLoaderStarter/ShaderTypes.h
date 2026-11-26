@@ -48,7 +48,7 @@ struct BasicMaterial
 Instead of a colour in each vertex we define a material
 for a group of primitves (an entire surface)
 */
-struct Material
+struct Material_t
 {
 	//textures are transformed by the vertex shader
 	struct TexTrsfm
@@ -58,11 +58,11 @@ struct Material
 		DirectX::SimpleMath::Vector2 translate = DirectX::SimpleMath::Vector2(0, 0);	//translation (scroll)
 	};
 	//cosntructors
-	Material() : flags(TFlags::APPEND_PATH | TFlags::LIT | TFlags::CULL | TFlags::CCW_WINDING) {
+	Material_t() : flags(TFlags::APPEND_PATH | TFlags::LIT | TFlags::CULL | TFlags::CCW_WINDING) {
 		blendFactors[0] = blendFactors[1] = blendFactors[2] = blendFactors[3] = 1;
 		pTextureRV = nullptr;
 	}
-	Material(const BasicMaterial &mat, ID3D11ShaderResourceView *pTex, TexTrsfm texTrsfm, int _flags, const std::string& _name, const std::string& file)
+	Material_t(const BasicMaterial &mat, ID3D11ShaderResourceView *pTex, TexTrsfm texTrsfm, int _flags, const std::string& _name, const std::string& file)
 		: gfxData(mat), name(_name), texture(file), flags(_flags) {
 		blendFactors[0] = blendFactors[1] = blendFactors[2] = blendFactors[3] = 1;
 		pTextureRV = pTex;
@@ -94,7 +94,7 @@ struct Material
 	std::string name;			//material names can come from 3DSMax and can be useful for debugging
 	std::string texture;		//file name of texture
 
-	static const Material default; //a default set of values to get you started
+	static const Material_t default; //a default set of values to get you started
 };
 
 /*

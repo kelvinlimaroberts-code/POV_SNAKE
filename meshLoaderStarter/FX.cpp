@@ -359,7 +359,7 @@ namespace FX
 			ReleaseCOM(mpRasterStates[i]);
 	}
 
-	void MyFX::Render(GameObject_t& model, Material* pOverrideMat)
+	void MyFX::Render(GameObject_t& model, Material_t* pOverrideMat)
 	{
 		//setup shaders
 		mD3D.GetDeviceCtx().VSSetShader(mpVS, nullptr, 0);
@@ -375,7 +375,7 @@ namespace FX
 			SubMesh& sm = mesh.GetSubMesh(i);
 
 			mD3D.InitInputAssembler(mpInputLayout, sm.mpVB, sizeof(VertexPosNormTex), sm.mpIB);
-			Material *pM;
+			Material_t *pM;
 			if (pOverrideMat)
 				pM = pOverrideMat;
 			else if (model.HasOverrideMat())
@@ -391,7 +391,7 @@ namespace FX
 		mD3D.GetDeviceCtx().OMSetBlendState(0, 0, 0xffffffff);
 	}
 
-	void MyFX::PreRenderObj(Material& mat)
+	void MyFX::PreRenderObj(Material_t& mat)
 	{
 		//texture transform
 		mGfxPerMesh.material = mat.gfxData;
@@ -412,7 +412,7 @@ namespace FX
 
 		//select pixel shader to use
 		ID3D11PixelShader* p;
-		if ((mat.flags&Material::TFlags::LIT) != 0)
+		if ((mat.flags&Material_t::TFlags::LIT) != 0)
 		{
 			if (mat.pTextureRV)
 				p = mpPSLitTex;
@@ -435,27 +435,27 @@ namespace FX
 		dc.PSSetShader(p, nullptr, 0);
 
 		//how is it blended?
-		if ((mat.flags&Material::TFlags::TRANSPARENCY) != 0)
+		if ((mat.flags&Material_t::TFlags::TRANSPARENCY) != 0)
 			dc.OMSetBlendState(mpBlendTransparent, mat.blendFactors, 0xffffffff);
-		else if ((mat.flags&Material::TFlags::ALPHA_TRANSPARENCY) != 0)
+		else if ((mat.flags&Material_t::TFlags::ALPHA_TRANSPARENCY) != 0)
 		{
 			float b[] = { 1, 1, 1, 1 };
 			dc.OMSetBlendState(mpBlendAlphaTrans, b, 0xffffffff);
 		}
 
 		//should we cull?
-		if ((mat.flags&Material::TFlags::CULL) == 0)
-			if ((mat.flags&Material::TFlags::WIRE_FRAME) != 0)
+		if ((mat.flags&Material_t::TFlags::CULL) == 0)
+			if ((mat.flags&Material_t::TFlags::WIRE_FRAME) != 0)
 				dc.RSSetState(mpRasterStates[RasterType::NOCULL_WIRE]);
 			else
 				dc.RSSetState(mpRasterStates[RasterType::NOCULL_FILLED]);
-		else if ((mat.flags&Material::TFlags::CCW_WINDING) != 0)
-			if ((mat.flags&Material::TFlags::WIRE_FRAME) != 0)
+		else if ((mat.flags&Material_t::TFlags::CCW_WINDING) != 0)
+			if ((mat.flags&Material_t::TFlags::WIRE_FRAME) != 0)
 				dc.RSSetState(mpRasterStates[RasterType::CCW_WIRE]);
 			else
 				dc.RSSetState(mpRasterStates[RasterType::CCW_FILLED]);
 		else
-			if ((mat.flags&Material::TFlags::WIRE_FRAME) != 0)
+			if ((mat.flags&Material_t::TFlags::WIRE_FRAME) != 0)
 				dc.RSSetState(mpRasterStates[RasterType::CW_WIRE]);
 			else
 				dc.RSSetState(mpRasterStates[RasterType::CW_FILLED]);

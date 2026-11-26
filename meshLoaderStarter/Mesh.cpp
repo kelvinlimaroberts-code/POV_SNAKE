@@ -207,7 +207,7 @@ void Mesh_t::Release()
 }
 
 void Mesh_t::CreateFrom(const VertexPosNormTex verts[], int numVerts, const unsigned int indices[], int numIndices, 
-	const Material& mat, int meshStartIndex, int meshNumIndices)
+	const Material_t& mat, int meshStartIndex, int meshNumIndices)
 {
 	Release();
 	SubMesh*p = new SubMesh;

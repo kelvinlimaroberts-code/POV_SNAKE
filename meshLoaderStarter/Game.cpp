@@ -42,7 +42,7 @@ void Game::LoadGameObjects()
 	Mesh_t& sphereMesh = d3d.GetMeshMgr().CreateMesh("sphere");
 	sphereMesh.CreateFrom("data/snakeStuff/sphere.obj", d3d);
 
-	Material mat; //a temporary place to hold material data when we are initialising
+	Material_t mat; //a temporary place to hold material data when we are initialising
 
 
 	////textured lit box

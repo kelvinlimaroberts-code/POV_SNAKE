@@ -32,7 +32,7 @@ public:
 	int mNumIndices = 0;
 	int mNumVerts = 0;
 
-	Material material;	//the material describes how the surface reacts to light
+	Material_t material;	//the material describes how the surface reacts to light
 };
 
 /*
@@ -59,7 +59,7 @@ public:
 	* mat - IN a material definining how this geometry reflects light
 	*/
 	void CreateFrom(const VertexPosNormTex verts[], int numVerts, const unsigned int indices[],
-		int numIndices, const Material& mat, int meshStartIndex, int meshNumIndices);
+		int numIndices, const Material_t& mat, int meshStartIndex, int meshNumIndices);
 	/*
 	* same as above, but uses assimp to load the geometry from a file
 	* should work with most common file formats

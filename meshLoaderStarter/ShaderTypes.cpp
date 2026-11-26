@@ -1,6 +1,6 @@
 #include "ShaderTypes.h"
 
-const Material Material::default {
+const Material_t Material_t::default {
 	{ { 1, 1, 1, 1 }, { 1, 1, 1, 1 }, { 1, 1, 1, 1 } },
 		nullptr,
 	{},

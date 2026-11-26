@@ -34,13 +34,13 @@ public:
 		return *mpMesh;
 	}
 	//has this game object been configured to use a custom material
-	Material* HasOverrideMat() {
+	Material_t* HasOverrideMat() {
 		if (mUseOverrideMat)
 			return &mOverrideMaterial;
 		return nullptr;
 	}
 	//tell the game object to use a custom material (take a copy of it) or stop using one
-	void SetOverrideMat(Material* pMat = nullptr) {
+	void SetOverrideMat(Material_t* pMat = nullptr) {
 		if (!pMat) {
 			mUseOverrideMat = false;
 			return;
@@ -62,7 +62,7 @@ private:
 
 	Mesh_t* mpMesh = nullptr;		//the mesh we are using
 	DirectX::SimpleMath::Vector3 mPosition, mScale, mRotation;	//positon, scale and orientation
-	Material mOverrideMaterial;		//an alternate material to the one in the Mesh
+	Material_t mOverrideMaterial;		//an alternate material to the one in the Mesh
 	bool mUseOverrideMat = false;	//should we actually be using it?
 	bool mIsActive = false;
 };

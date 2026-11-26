@@ -85,7 +85,7 @@ namespace FX
 		* pOverrideMat - IN Models and Meshes have materials controlling how they look, but we can optionally
 		*				pass one in to use instead, so we can make the model look different without altering it
 		*/
-		void Render(GameObject_t& model, Material* pOverrideMat = nullptr);
+		void Render(GameObject_t& model, Material_t* pOverrideMat = nullptr);
 
 		//getters
 		DirectX::SimpleMath::Matrix& GetProjectionMatrix() { return mProj; }
@@ -147,7 +147,7 @@ namespace FX
 		void CreateConstantBuffers();
 		void ReleaseConstantBuffers();
 		//called before rendering anything	
-		void PreRenderObj(Material& mat);
+		void PreRenderObj(Material_t& mat);
 		//mapping between vertex/index buffers and gpu
 		ID3D11InputLayout* mpInputLayout = nullptr;
 		//a smapler to read the texture
