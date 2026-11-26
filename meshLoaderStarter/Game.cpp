@@ -16,7 +16,7 @@ void Setup(GameObject_t& gameObj, Mesh_t& source, const Vector3& scale, const Ve
 {
 	gameObj.Initialise(source);
 	gameObj.GetScale() = scale;
-	gameObj.GetPosition() = pos;
+	gameObj.SetPosition(pos);
 	gameObj.GetRotation() = rot;
 }
 
@@ -135,7 +135,6 @@ void Game::LoadGameObjects()
 		diff.z = (i / (float)(GameObjectID::TOTAL - GameObjectID::SEGMENT)); //make it more blue towards the end of the snake
 		mat.gfxData.Set(diff, amb, spec); //custom colour
 		mGameObjects[GameObjectID::SEGMENT + i].SetOverrideMat(&mat);
-		mGameObjects[GameObjectID::SEGMENT + i].GetPosition().x += i * tileSize;
 		//mGameObjects[GameObjectID::SEGMENT + i].SetActive();
 	}
 
@@ -198,12 +197,16 @@ void Game::Update(float dTime)
 				FactorCollisions(nextPos);
 				player.MoveSnake(nextPos, map);
 				//move the head game object to the new position
-				mGameObjects[GameObjectID::SEGMENT].GetPosition() = MapPosToVec3(player.GetPosition());		
-				if (score > 0)
+				mGameObjects[GameObjectID::SEGMENT].SetPosition(MapPosToVec3(player.GetPosition()));
+				//if (score > 0)
+				//{
+				//	//move the last active segment to being behind the players head 
+				//	//needs to make sure there is a tail to move, otherwise it would interfere with head movement
+				//	mGameObjects[GameObjectID::SEGMENT + score].SetPosition(MapPosToVec3(player.GetPreviousPosition()));
+				//}
+				for (size_t i = 0; i < score; i++)		//move segments based on the previous postion of the one in front
 				{
-					//move the last active segment to being behind the players head 
-					//needs to make sure there is a tail to move, otherwise it would interfere with head movement
-					mGameObjects[GameObjectID::SEGMENT + score].GetPosition() = MapPosToVec3(player.GetPreviousPosition());		
+					mGameObjects[GameObjectID::SEGMENT + i+1].SetPosition(mGameObjects[GameObjectID::SEGMENT + i].GetPreviousPosition());
 				}
 
 			}
@@ -427,7 +430,7 @@ void Game::RegenerateApple()
 		{
 			if (mGameObjects[ORANGE].GetIsActive()) //move the game object if it is active
 			{
-				mGameObjects[ORANGE].GetPosition() = MapPosToVec3(applePos);
+				mGameObjects[ORANGE].SetPosition(MapPosToVec3(applePos));
 			}
 		}
 		
