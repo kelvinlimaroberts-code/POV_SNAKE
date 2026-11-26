@@ -255,6 +255,8 @@ LRESULT Game::WindowsMssgHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 	{
 		// Respond to a keyboard event.
 	case WM_CHAR:
+		lastKeyPress = wParam;
+		TakeInputKey();
 		switch (wParam)
 		{
 		case 27:
@@ -262,22 +264,22 @@ LRESULT Game::WindowsMssgHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 		case 'Q':
 			PostQuitMessage(0);
 			return 0;
-		case 'r':
+		case 'y':
 			mCamPos.y += camInc;
 			break;
-		case 'f':
+		case 'h':
 			mCamPos.y -= camInc;
 			break;
-		case 'a':
+		case 'j':
 			mCamPos.x -= camInc;
 			break;
-		case 'd':
+		case 'l':
 			mCamPos.x += camInc;
 			break;
-		case 'w':
+		case 'i':
 			mCamPos.z += camInc;
 			break;
-		case 's':
+		case 'k':
 			mCamPos.z -= camInc;
 			break;
 		case ' ':
@@ -292,7 +294,6 @@ LRESULT Game::WindowsMssgHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 
 void Game::TakeInputKey()
 {
-	//std::cin >> lastKeyPress;
 	DirectionValue desiredDir = player.GetDirection();
 	switch ((InputValue)lastKeyPress)
 	{
