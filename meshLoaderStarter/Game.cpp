@@ -88,7 +88,7 @@ void Game::LoadGameObjects()
 	//mGameObjects[GameObjectID::WINDOW2].SetOverrideMat(&mat);
 
 	//quad wood floor
-	Setup(mGameObjects[GameObjectID::FLOOR], quadMesh, Vector3(gridSize, 1, gridSize), Vector3(0, -0.6f, 0), Vector3(0, 0, 0));
+	Setup(mGameObjects[GameObjectID::FLOOR], quadMesh, Vector3(gridSize/2, 1, gridSize/2), Vector3(0, -0.6f, 0), Vector3(0, 0, 0));
 	mat = mGameObjects[GameObjectID::FLOOR].GetMesh().GetSubMesh(0).material;
 	mat.gfxData.Set(Vector4(0.9f, 0.8f, 0.8f, 0), Vector4(0.9f, 0.8f, 0.8f, 0), Vector4(0.9f, 0.8f, 0.8f, 1));
 	mat.pTextureRV = d3d.GetCache().LoadTexture(&d3d.GetDevice(), "floor.dds");
@@ -111,7 +111,7 @@ void Game::LoadGameObjects()
 	d3d.GetFX().SetupDirectionalLight(0, true, Vector3(-0.7f, -0.7f, 0.7f), Vector3(0.47f, 0.47f, 0.47f), Vector3(0.15f, 0.15f, 0.15f), Vector3(0.25f, 0.25f, 0.25f));
 
 	//the apple
-	Setup(mGameObjects[GameObjectID::ORANGE], appleMesh, 1, Short2toVec3( applePos) , Vector3(0, 0, 0));
+	Setup(mGameObjects[GameObjectID::ORANGE], appleMesh, 1, MapPosToVec3( applePos) , Vector3(0, 0, 0));
 	mat.gfxData.Set(Vector4(1, 0.f, 0.f, 0), Vector4(1, 0.5f, 0.5f, 0), Vector4(1, 1, 1, 1)); //red
 	mGameObjects[GameObjectID::ORANGE].SetOverrideMat(&mat);
 	mGameObjects[GameObjectID::ORANGE].SetActive();
@@ -119,7 +119,7 @@ void Game::LoadGameObjects()
 	
 	//the segments
 	//set up head segment
-	Setup(mGameObjects[GameObjectID::SEGMENT], sphereMesh, 0.5f, Short2toVec3(player.GetPosition()), Vector3(0, 0, 0));
+	Setup(mGameObjects[GameObjectID::SEGMENT], sphereMesh, 0.5f, MapPosToVec3(player.GetPosition()), Vector3(0, 0, 0));
 	mat = mGameObjects[GameObjectID::SEGMENT].GetMesh().GetSubMesh(0).material;
 	Vector4 diff, amb, spec;
 	diff = Vector4(0.2f, 0.9f, 0.2f, 0);
@@ -131,7 +131,7 @@ void Game::LoadGameObjects()
 	//set up body segments
 	for (size_t i = 1; i < GameObjectID::TOTAL - GameObjectID::SEGMENT; i++)
 	{
-		Setup(mGameObjects[GameObjectID::SEGMENT + i], sphereMesh, 0.5f, Short2toVec3(player.GetPosition()), Vector3(0, 0, 0));
+		Setup(mGameObjects[GameObjectID::SEGMENT + i], sphereMesh, 0.5f, MapPosToVec3(player.GetPosition()), Vector3(0, 0, 0));
 		diff.z = (i / (float)(GameObjectID::TOTAL - GameObjectID::SEGMENT)); //make it more blue towards the end of the snake
 		mat.gfxData.Set(diff, amb, spec); //custom colour
 		mGameObjects[GameObjectID::SEGMENT + i].SetOverrideMat(&mat);
@@ -188,12 +188,19 @@ void Game::Update(float dTime)
 	//mModels[Modelid::OTHER].GetRotation().y = -mAngle * 2;
 	if (GameIsRunning())
 	{
-		short2 nextPos = player.GetPosition();
-		if (player.ValidSnakeMovement(nextPos))
+		delayTimer += dTime;
+		if (delay < delayTimer)		//only run game after certain amount of time has passed
 		{
-			FactorCollisions(nextPos);
-			player.MoveSnake(nextPos, map);
+			delayTimer = 0.f;
+			short2 nextPos = player.GetPosition();
+			if (player.ValidSnakeMovement(nextPos))
+			{
+				FactorCollisions(nextPos);
+				player.MoveSnake(nextPos, map);
+				mGameObjects[GameObjectID::SEGMENT].GetPosition() = MapPosToVec3(player.GetPosition());
+			}
 		}
+		
 	}
 	else
 	{
@@ -362,7 +369,7 @@ void Game::OutputQuitMessage()
 
 bool Game::GameIsRunning()
 {
-	return player.HasLife() && player.GetScore()>=gridSize*gridSize;
+	return player.HasLife() && player.GetScore()<gridSize*gridSize;
 }
 
 
@@ -412,7 +419,7 @@ void Game::RegenerateApple()
 		{
 			if (mGameObjects[ORANGE].GetIsActive()) //move the game object if it is active
 			{
-				mGameObjects[ORANGE].GetPosition() = Short2toVec3(applePos);
+				mGameObjects[ORANGE].GetPosition() = MapPosToVec3(applePos);
 			}
 		}
 		

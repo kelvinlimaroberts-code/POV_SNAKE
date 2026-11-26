@@ -1,5 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
+#pragma once
 #include <cstdlib>      //for random
 #include <ctime>        //for seed
 
@@ -72,6 +73,9 @@ private:
 	Snake_t player;
 	//apple
 	short2 applePos = { 1,1 };
+	//game management
+	const float delay = 0.5f;
+	float delayTimer = 0.0f;
 
 	//load all models
 	void LoadGameObjects();
@@ -88,7 +92,7 @@ private:
 	void RegenerateApple();
 
 	//other useful funcs
-	DirectX::SimpleMath::Vector3 Short2toVec3(short2 xy) { return DirectX::SimpleMath::Vector3(xy.x, 0, xy.y); }
+	DirectX::SimpleMath::Vector3 MapPosToVec3(short2 xy) { return DirectX::SimpleMath::Vector3(-xy.y, 0, -xy.x); }
 };
 
 #endif
