@@ -7,6 +7,7 @@ Snake_t::Snake_t()
 {
 	mpHead = new Segment_t(nullptr, 0);
 	mpHead->SetID(SNAKE_HEAD);
+    mpHead->SetPos({ gridSize / 2, gridSize / 2 });
 }
 
 Snake_t::~Snake_t()
@@ -51,19 +52,26 @@ void Snake_t::MoveSnake(const short2& pos, Map_t& m)
     //work from head down the linked list
     mpHead->SetPos(pos);                                //object update head pos
     m.IdentifyAsItem(SNAKE_HEAD, pos);                  //map register head
+    BodyParts[0]->SetPosition(MapPosToVec3(pos));       //world register head
     if (mpHead->pNextSegment != nullptr)                //if its not just the head
     {
         m.UnidentifyItem(mpHead->GetPrevPos());         //map deregister previous head position
         m.IdentifyAsItem(SNAKE_BODY, mpHead->GetPrevPos());//map register previous position as snake body
     }
-    Segment_t* index = mpHead;
-    while (index->pNextSegment != nullptr)               //for the rest of the segments
+    Segment_t* segmentIndex = mpHead;                   //index for navigating linked list
+    int bodyIndex = 0;                                  //index for navigating body game objects
+    while (segmentIndex->pNextSegment != nullptr)       //for the rest of the segments
     {
         //update the position of the next one with the previous position of the current selected
-        index->pNextSegment->SetPos(index->GetPrevPos());
-        index = index->pNextSegment;                     //update the index to be pointing at the next element
+        segmentIndex->pNextSegment->SetPos(segmentIndex->GetPrevPos());
+
+        //update world position of the next one, with the previous position of the one selected
+        BodyParts[bodyIndex + 1]->SetPosition(MapPosToVec3(segmentIndex->GetPrevPos()));
+
+        segmentIndex = segmentIndex->pNextSegment;      //update the index to be pointing at the next element
+        bodyIndex++;                                    //update body index to look at next 
     }
-    m.UnidentifyItem(index->GetPrevPos());               //map deregister snake tail tip
+    m.UnidentifyItem(segmentIndex->GetPrevPos());       //map deregister snake tail tip
 }
 
 bool Snake_t::ValidSnakeMovement(short2& desiredNewPos)
@@ -120,6 +128,7 @@ void Snake_t::IncrementScore()
     score++;
     BodyParts[score]->SetActive();
 }
+
 Segment_t* Snake_t::GetTail()
 {
     Segment_t* pIndex = mpHead;                 //use this to read/write to list

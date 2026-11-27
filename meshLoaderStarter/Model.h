@@ -22,9 +22,9 @@ public:
 	void SetActive(bool activate = true) { mIsActive = activate; }
 	bool GetIsActive() { return mIsActive; }
 	//get and optionally set pos/scale/rotation
-	void SetPosition(DirectX::SimpleMath::Vector3 pos) { mPreviousPos = mPosition; mPosition = pos; }
-	const DirectX::SimpleMath::Vector3 GetPosition()  { return mPosition; }
-	const DirectX::SimpleMath::Vector3 GetPreviousPosition() { return mPreviousPos; }
+	void SetPosition(DirectX::SimpleMath::Vector3 pos) { mPosition = pos; }
+	const DirectX::SimpleMath::Vector3 GetPosition() { return mPosition; }
+	DirectX::SimpleMath::Vector3& GetPositionRef() { return mPosition; }
 	DirectX::SimpleMath::Vector3& GetScale() { return mScale; }
 	DirectX::SimpleMath::Vector3& GetRotation() { return mRotation; }
 	//build a matrix from the euler angles, pos and scale
@@ -63,7 +63,7 @@ public:
 private:
 
 	Mesh_t* mpMesh = nullptr;		//the mesh we are using
-	DirectX::SimpleMath::Vector3 mPosition{}, mPreviousPos, mScale, mRotation;	//positon, scale and orientation
+	DirectX::SimpleMath::Vector3 mPosition, mScale, mRotation;	//positon, scale and orientation
 	Material_t mOverrideMaterial;		//an alternate material to the one in the Mesh
 	bool mUseOverrideMat = false;	//should we actually be using it?
 	bool mIsActive = false;

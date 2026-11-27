@@ -147,7 +147,7 @@ void Game::Initialise()
 	srand(time(0));   //generate seed
 	//identify GRID items ON INIT
 	//place player
-	player.MoveSnake({ (gridSize - 2) / 2, (gridSize - 2) / 2 }, map);
+	//player.MoveSnake({ (gridSize - 2) / 2, (gridSize - 2) / 2 }, map);
 	//place apple
 	RegenerateApple();
 
@@ -202,10 +202,6 @@ void Game::Update(float dTime)
 				player.MoveSnake(nextPos, map);
 				//move the head game object to the new position
 				mGameObjects[GameObjectID::SEGMENT].SetPosition(MapPosToVec3(player.GetPosition()));
-				for (size_t i = 0; i < player.GetScore(); i++)							//move segments based on the previous postion of the one in front
-				{
-					mGameObjects[GameObjectID::SEGMENT + i+1].SetPosition(mGameObjects[GameObjectID::SEGMENT + i].GetPreviousPosition());
-				}
 			}
 		}
 	}

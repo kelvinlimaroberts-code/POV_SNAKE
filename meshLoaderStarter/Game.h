@@ -91,8 +91,7 @@ private:
 	void GenerateRandomPos(short2&);
 	void RegenerateApple();
 
-	//other useful funcs
-	DirectX::SimpleMath::Vector3 MapPosToVec3(short2 xy) { return DirectX::SimpleMath::Vector3(xy.x - gridSize/2.f +tileSize/2.f, 0, xy.y-gridSize/2.f+tileSize/2.f); }
+	
 };
 
 #endif

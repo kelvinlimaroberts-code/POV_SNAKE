@@ -36,8 +36,6 @@ const char Tile_t::GetDisplayValue() const
 	return displayValue;
 }
 
-
-
 Segment_t::Segment_t(Segment_t* prevSeg, const int bodyID) : pPrevSegment(prevSeg), BodyID(bodyID)
 {
 	SetID(SNAKE_BODY);
