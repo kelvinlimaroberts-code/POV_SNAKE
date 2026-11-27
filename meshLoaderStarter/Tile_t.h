@@ -15,6 +15,7 @@ private:
 	
 };
 
+class GameObject_t;				//forward declaration to allow for pointers
 
 class Segment_t : public Tile_t
 {
@@ -33,6 +34,7 @@ public:
 private:
 	short2 pos = { 0,0 };
 	short2 prevPos = pos;
+	GameObject_t* pBodyPart;
 };
 
 
