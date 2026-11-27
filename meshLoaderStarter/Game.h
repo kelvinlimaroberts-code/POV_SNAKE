@@ -74,7 +74,7 @@ private:
 	//apple
 	short2 applePos = { 1,1 };
 	//game management
-	const float delay = 0.5f;
+	const float delay = 0.1f;
 	float delayTimer = 0.0f;
 
 	//load all models
@@ -84,7 +84,7 @@ private:
 
 	//member function from 
 
-	void TakeInputKey();		
+	bool TakeInputKey();		
 	void OutputQuitMessage();  //needs editing
 	bool GameIsRunning();
 	void FactorCollisions(short2 nextPos);

@@ -191,10 +191,11 @@ void Game::Update(float dTime)
 	if (GameIsRunning())
 	{
 		delayTimer += dTime;
-		if (delay < delayTimer)		//only run game after certain amount of time has passed
+		//continue to update after the delay timer is up
+		if ( delay < delayTimer)
 		{
 			delayTimer = 0.f;
-
+			TakeInputKey();
 			short2 nextPos = player.GetPosition();
 			if (player.ValidSnakeMovement(nextPos))
 			{
@@ -265,7 +266,6 @@ LRESULT Game::WindowsMssgHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 		// Respond to a keyboard event.
 	case WM_CHAR:
 		lastKeyPress = wParam;
-		TakeInputKey();
 		switch (wParam)
 		{
 		case 27:
@@ -301,8 +301,9 @@ LRESULT Game::WindowsMssgHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 }
 
 
-void Game::TakeInputKey()
+bool Game::TakeInputKey()
 {
+	bool tookKey = true;
 	DirectionValue desiredDir = player.GetDirection();
 	switch ((InputValue)lastKeyPress)
 	{
@@ -323,6 +324,7 @@ void Game::TakeInputKey()
 		desiredDir = UP_DIR;
 		break;
 	default:
+		tookKey = false;
 		break;
 	}
 	switch (player.GetDirection())
@@ -355,6 +357,7 @@ void Game::TakeInputKey()
 		player.GetDirection() = desiredDir;
 		break;
 	}
+	return tookKey;
 }
 
 void Game::OutputQuitMessage()
