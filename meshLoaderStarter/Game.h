@@ -74,8 +74,8 @@ private:
 	//apple
 	short2 applePos = { 1,1 };
 	//game management
-	const float delay = 0.1f;
-	float delayTimer = 0.0f;
+	const float delay = 0.25f;
+	float elapsedSecs = 0.0f;
 
 	//load all models
 	void LoadGameObjects();
