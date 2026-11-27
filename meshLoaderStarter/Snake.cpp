@@ -1,8 +1,11 @@
 #include "Snake.h"
+#include "Model.h"
+
+GameObject_t* Snake_t::BodyParts[gridSize * gridSize];
 
 Snake_t::Snake_t()
 {
-	mpHead = new Segment_t(nullptr);
+	mpHead = new Segment_t(nullptr, 0);
 	mpHead->SetID(SNAKE_HEAD);
 }
 
@@ -28,8 +31,9 @@ short2 Snake_t::GetPreviousPosition()
 
 Snake_t& Snake_t::operator++() 
 {
+    IncrementScore();
 	Segment_t* tail = GetTail();
-	tail->pNextSegment = new Segment_t(tail);
+	tail->pNextSegment = new Segment_t(tail, score);
     return *this;
 
 }
@@ -94,6 +98,8 @@ bool Snake_t::ValidSnakeMovement(short2& desiredNewPos)
 
 
 
+
+
 bool& Snake_t::HasLife()
 {
     return snakeAlive;
@@ -104,6 +110,16 @@ DirectionValue& Snake_t::GetDirection()
     return direction;
 }
 
+const int Snake_t::GetScore() const
+{
+    return score;
+}
+
+void Snake_t::IncrementScore()
+{
+    score++;
+    BodyParts[score]->SetActive();
+}
 Segment_t* Snake_t::GetTail()
 {
     Segment_t* pIndex = mpHead;                 //use this to read/write to list

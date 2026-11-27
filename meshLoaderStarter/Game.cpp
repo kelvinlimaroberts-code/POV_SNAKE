@@ -128,6 +128,7 @@ void Game::LoadGameObjects()
 	mat.gfxData.Set(diff, amb , spec); //green
 	mGameObjects[GameObjectID::SEGMENT].SetOverrideMat(&mat);
 	mGameObjects[GameObjectID::SEGMENT].SetActive();
+	player.BodyParts[0] = &mGameObjects[GameObjectID::SEGMENT]; //put the segment body object into the array of body parts
 	//set up body segments
 	for (size_t i = 1; i < GameObjectID::TOTAL - GameObjectID::SEGMENT; i++)
 	{
@@ -136,6 +137,7 @@ void Game::LoadGameObjects()
 		mat.gfxData.Set(diff, amb, spec); //custom colour
 		mGameObjects[GameObjectID::SEGMENT + i].SetOverrideMat(&mat);
 		//mGameObjects[GameObjectID::SEGMENT + i].SetActive();
+		player.BodyParts[i] = &mGameObjects[GameObjectID::SEGMENT + i]; //put the segment body object into the array of body parts
 	}
 
 }
@@ -169,6 +171,8 @@ void Game::Release()
 	mpFont = nullptr;
 }
 
+
+
 void Game::Update(float dTime)
 {
 	////spin things around
@@ -190,6 +194,7 @@ void Game::Update(float dTime)
 		if (delay < delayTimer)		//only run game after certain amount of time has passed
 		{
 			delayTimer = 0.f;
+
 			short2 nextPos = player.GetPosition();
 			if (player.ValidSnakeMovement(nextPos))
 			{
@@ -197,20 +202,12 @@ void Game::Update(float dTime)
 				player.MoveSnake(nextPos, map);
 				//move the head game object to the new position
 				mGameObjects[GameObjectID::SEGMENT].SetPosition(MapPosToVec3(player.GetPosition()));
-				//if (score > 0)
-				//{
-				//	//move the last active segment to being behind the players head 
-				//	//needs to make sure there is a tail to move, otherwise it would interfere with head movement
-				//	mGameObjects[GameObjectID::SEGMENT + score].SetPosition(MapPosToVec3(player.GetPreviousPosition()));
-				//}
-				for (size_t i = 0; i < score; i++)		//move segments based on the previous postion of the one in front
+				for (size_t i = 0; i < player.GetScore(); i++)							//move segments based on the previous postion of the one in front
 				{
 					mGameObjects[GameObjectID::SEGMENT + i+1].SetPosition(mGameObjects[GameObjectID::SEGMENT + i].GetPreviousPosition());
 				}
-
 			}
 		}
-		
 	}
 	else
 	{
@@ -366,7 +363,7 @@ void Game::TakeInputKey()
 
 void Game::OutputQuitMessage()
 {
-	if (score >= gridSize * gridSize)
+	if (player.GetScore() >= gridSize * gridSize)
 	{
 		//display you win yippee
 	}
@@ -379,7 +376,7 @@ void Game::OutputQuitMessage()
 
 bool Game::GameIsRunning()
 {
-	return player.HasLife() && score<gridSize*gridSize;
+	return player.HasLife() && player.GetScore()<gridSize*gridSize;
 }
 
 
@@ -395,7 +392,6 @@ void Game::FactorCollisions(short2 nextPos)
 	case APPLE:
 		map.UnidentifyItem(nextPos);
 		++player;
-		IncrementScore();
 		map.AppleEaten() = true;
 		RegenerateApple();
 		break;
@@ -436,9 +432,4 @@ void Game::RegenerateApple()
 	}
 }
 
-void Game::IncrementScore()
-{
-	score++;
-	mGameObjects[GameObjectID::SEGMENT + score].SetActive();
-}
 

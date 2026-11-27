@@ -1,4 +1,5 @@
 #include "Tile_t.h"
+#include "Model.h"
 
 const GridItem& Tile_t::GetID() const 
 {
@@ -37,7 +38,7 @@ const char Tile_t::GetDisplayValue() const
 
 
 
-Segment_t::Segment_t(Segment_t* prevSeg) : pPrevSegment(prevSeg)
+Segment_t::Segment_t(Segment_t* prevSeg, const int bodyID) : pPrevSegment(prevSeg), BodyID(bodyID)
 {
 	SetID(SNAKE_BODY);
 }
@@ -58,6 +59,11 @@ const short2 Segment_t::GetPos() const
 const short2 Segment_t::GetPrevPos() const
 {
 	return prevPos;
+}
+
+const int Segment_t::GetBodyID() const
+{
+	return BodyID;
 }
 
 
