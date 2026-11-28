@@ -12,7 +12,7 @@ private:
 	static constexpr DirectX::SimpleMath::Vector3 DebugPosition = DirectX::SimpleMath::Vector3(2, 38, 0);
 	static constexpr DirectX::SimpleMath::Vector3 DebugTarget = DirectX::SimpleMath::Vector3(0, 0, 0);
 	DirectX::SimpleMath::Vector3 position = DebugPosition;
-	DirectX::SimpleMath::Vector3 target = DebugPosition;
-	bool debugMode = true;
+	DirectX::SimpleMath::Vector3 target = DebugTarget;
+	bool debugMode = false;
 };
 

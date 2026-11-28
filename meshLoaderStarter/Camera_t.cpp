@@ -1,5 +1,7 @@
 #include "Camera_t.h"
 
+
+
 void Camera_t::Relocate(DirectX::SimpleMath::Vector3 newPos, DirectX::SimpleMath::Vector3 newTarget)
 {
 	if (debugMode)
