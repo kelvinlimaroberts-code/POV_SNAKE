@@ -19,7 +19,7 @@ constexpr short gridSize = 22;
 enum GridItem { EMPTY, WALL, APPLE, SNAKE_HEAD, SNAKE_BODY };
 
 //direction
-enum DirectionValue { NO_DIR, UP_DIR, LEFT_DIR, RIGHT_DIR, DOWN_DIR };
+enum DirectionValue { NO_DIR, NORTH_DIR, WEST_DIR, EAST_DIR, SOUTH_DIR };
 
 
 ////useful funcs

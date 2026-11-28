@@ -14,6 +14,7 @@
 
 
 #include "Snake.h"
+#include "Camera_t.h"
 
 
 
@@ -47,8 +48,7 @@ public:
 	LRESULT WindowsMssgHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	//a camera we can push around the scene
-	const DirectX::SimpleMath::Vector3 mDefCamPos = DirectX::SimpleMath::Vector3(2, 38, 0);
-	DirectX::SimpleMath::Vector3 mCamPos = DirectX::SimpleMath::Vector3(2, 38, 0);
+	Camera_t mCamera;
 
 	//stick all gameObjects in a vector and use an enum to index them
 	std::vector<GameObject_t> mGameObjects;

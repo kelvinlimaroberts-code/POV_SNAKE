@@ -1,5 +1,6 @@
 #include "Snake.h"
 #include "Model.h"
+#include "Camera_t.h"
 
 GameObject_t* Snake_t::BodyParts[gridSize * gridSize];
 
@@ -47,7 +48,7 @@ Snake_t& Snake_t::operator--()
     return *this;
 }
 
-void Snake_t::MoveSnake(const short2& pos, Map_t& m)
+void Snake_t::MoveSnake(const short2& pos, Map_t& m, Camera_t& camera)
 {
     //work from head down the linked list
     mpHead->SetPos(pos);                                //object update head pos
@@ -72,7 +73,32 @@ void Snake_t::MoveSnake(const short2& pos, Map_t& m)
         bodyIndex++;                                    //update body index to look at next 
     }
     m.UnidentifyItem(segmentIndex->GetPrevPos());       //map deregister snake tail tip
+
+    //MOVE THE CAMERA
+    //have its target be the direction we want the snake to face
+    short2 camTrgt = pos;
+    switch (direction)
+    {
+    case NORTH_DIR:
+        camTrgt.x--;
+        break;
+    case WEST_DIR:
+        camTrgt.y--;
+        break;
+    case EAST_DIR:
+        camTrgt.y++;
+        break;
+    case SOUTH_DIR:
+        camTrgt.x++;
+        break;
+    default:
+        camTrgt = { 4,4 };
+        break;
+    }
+    camera.Relocate(MapPosToVec3(pos), MapPosToVec3(camTrgt));
 }
+
+
 
 bool Snake_t::ValidSnakeMovement(short2& desiredNewPos)
 {
@@ -80,16 +106,16 @@ bool Snake_t::ValidSnakeMovement(short2& desiredNewPos)
     {
         switch (direction)
         {
-        case UP_DIR:
+        case NORTH_DIR:
             desiredNewPos.x--;
             break;
-        case LEFT_DIR:
+        case WEST_DIR:
             desiredNewPos.y--;
             break;
-        case RIGHT_DIR:
+        case EAST_DIR:
             desiredNewPos.y++;
             break;
-        case DOWN_DIR:
+        case SOUTH_DIR:
             desiredNewPos.x++;
             break;
         default:

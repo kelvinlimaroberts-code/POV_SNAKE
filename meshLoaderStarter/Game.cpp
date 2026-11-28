@@ -199,9 +199,8 @@ void Game::Update(float dTime)
 			if (player.ValidSnakeMovement(nextPos))
 			{
 				FactorCollisions(nextPos);
-				player.MoveSnake(nextPos, map);
+				player.MoveSnake(nextPos, map, mCamera);
 				//move the head game object to the new position
-				mGameObjects[GameObjectID::SEGMENT].SetPosition(MapPosToVec3(player.GetPosition()));
 			}
 			elapsedSecs = 0.f;
 		}
@@ -226,8 +225,8 @@ void Game::RenderGame(float dTime)
 	float alpha = 0.5f + sinf(mAngle * 2)*0.5f;
 
 	//setup camera and projections, prep shaders
-	d3d.GetFX().SetPerFrameConsts(d3d.GetDeviceCtx(), mCamPos);
-	CreateViewMatrix(d3d.GetFX().GetViewMatrix(), mCamPos, Vector3(0, 0, 0), Vector3(0, 1, 0));
+	d3d.GetFX().SetPerFrameConsts(d3d.GetDeviceCtx(), mCamera.GetPositionRef());
+	CreateViewMatrix(d3d.GetFX().GetViewMatrix(), mCamera.GetPositionRef(), mCamera.GetTargetRef() , Vector3(0, 1, 0));
 	CreateProjectionMatrix(d3d.GetFX().GetProjectionMatrix(), 0.25f*PI, WinUtil::Get().GetAspectRatio(), 1, 1000.f);
 	Matrix w = Matrix::CreateRotationY(sinf(mAngle));
 	d3d.GetFX().SetPerObjConsts(d3d.GetDeviceCtx(), w);
@@ -274,25 +273,26 @@ LRESULT Game::WindowsMssgHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 			PostQuitMessage(0);
 			return 0;
 		case 'y':
-			mCamPos.y += camInc;
+			mCamera.GetPositionRef().y += camInc;
 			break;
 		case 'h':
-			mCamPos.y -= camInc;
+			mCamera.GetPositionRef().y -= camInc;
 			break;
 		case 'j':
-			mCamPos.x -= camInc;
+			mCamera.GetPositionRef().x -= camInc;
 			break;
 		case 'l':
-			mCamPos.x += camInc;
+			mCamera.GetPositionRef().x += camInc;
 			break;
 		case 'i':
-			mCamPos.z += camInc;
+			mCamera.GetPositionRef().z += camInc;
 			break;
 		case 'k':
-			mCamPos.z -= camInc;
+			mCamera.GetPositionRef().z -= camInc;
 			break;
 		case ' ':
-			mCamPos = mDefCamPos;
+			mCamera.ToggleDebugMode();
+			mCamera.Relocate();
 			break;
 		}
 	}
@@ -309,19 +309,19 @@ bool Game::TakeInputKey()
 	{
 	case INPUT_A:
 	case INPUT_a:
-		desiredDir = LEFT_DIR;
+		desiredDir = WEST_DIR;
 		break;
 	case INPUT_D:
 	case INPUT_d:
-		desiredDir = RIGHT_DIR;
+		desiredDir = EAST_DIR;
 		break;
 	case INPUT_S:
 	case INPUT_s:
-		desiredDir = DOWN_DIR;
+		desiredDir = SOUTH_DIR;
 		break;
 	case INPUT_W:
 	case INPUT_w:
-		desiredDir = UP_DIR;
+		desiredDir = NORTH_DIR;
 		break;
 	default:
 		tookKey = false;
@@ -329,26 +329,26 @@ bool Game::TakeInputKey()
 	}
 	switch (player.GetDirection())
 	{
-	case UP_DIR:
-		if (desiredDir != DOWN_DIR)
+	case NORTH_DIR:
+		if (desiredDir != SOUTH_DIR)
 		{
 			player.GetDirection() = desiredDir;
 		}
 		break;
-	case LEFT_DIR:
-		if (desiredDir != RIGHT_DIR)
+	case WEST_DIR:
+		if (desiredDir != EAST_DIR)
 		{
 			player.GetDirection() = desiredDir;
 		}
 		break;
-	case RIGHT_DIR:
-		if (desiredDir != LEFT_DIR)
+	case EAST_DIR:
+		if (desiredDir != WEST_DIR)
 		{
 			player.GetDirection() = desiredDir;
 		}
 		break;
-	case DOWN_DIR:
-		if (desiredDir != UP_DIR)
+	case SOUTH_DIR:
+		if (desiredDir != NORTH_DIR)
 		{
 			player.GetDirection() = desiredDir;
 		}

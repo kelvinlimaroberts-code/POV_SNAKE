@@ -96,6 +96,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera_t.cpp" />
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="D3DUtil.cpp" />
     <ClCompile Include="FX.cpp" />
@@ -114,6 +115,7 @@
     <ClCompile Include="WindowUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera_t.h" />
     <ClInclude Include="Contants.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="D3DUtil.h" />
