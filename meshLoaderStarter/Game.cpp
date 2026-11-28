@@ -301,63 +301,92 @@ LRESULT Game::WindowsMssgHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 }
 
 
-bool Game::TakeInputKey()
+void Game::TakeInputKey()
 {
-	bool tookKey = true;
-	DirectionValue desiredDir = player.GetDirection();
-	switch ((InputValue)lastKeyPress)
-	{
-	case INPUT_A:
-	case INPUT_a:
-		desiredDir = WEST_DIR;
-		break;
-	case INPUT_D:
-	case INPUT_d:
-		desiredDir = EAST_DIR;
-		break;
-	case INPUT_S:
-	case INPUT_s:
-		desiredDir = SOUTH_DIR;
-		break;
-	case INPUT_W:
-	case INPUT_w:
-		desiredDir = NORTH_DIR;
-		break;
-	default:
-		tookKey = false;
-		break;
-	}
+	//if (the player hasnt selected a direction yet on the start of the game)
+	//	then keep inputs as original NWSE to WASD
+	//else // we must be in POV Mode
+	//	W and S dont matter
+	//	A and D change their outcome based on the current direction
+
+
 	switch (player.GetDirection())
 	{
-	case NORTH_DIR:
-		if (desiredDir != SOUTH_DIR)
+	case NO_DIR:
+		switch ((InputValue)lastKeyPress)
 		{
-			player.GetDirection() = desiredDir;
+		case INPUT_A:
+		case INPUT_a:
+			player.GetDirection() = WEST_DIR;
+			break;
+		case INPUT_D:
+		case INPUT_d:
+			player.GetDirection() = EAST_DIR;
+			break;
+		case INPUT_S:
+		case INPUT_s:
+			player.GetDirection() = SOUTH_DIR;
+			break;
+		case INPUT_W:
+		case INPUT_w:
+			player.GetDirection() = NORTH_DIR;
+			break;
+		}
+		break;
+	case NORTH_DIR:
+		switch ((InputValue)lastKeyPress)
+		{
+		case INPUT_A:
+		case INPUT_a:
+			player.GetDirection() = WEST_DIR;
+			break;
+		case INPUT_D:
+		case INPUT_d:
+			player.GetDirection() = EAST_DIR;
+			break;
 		}
 		break;
 	case WEST_DIR:
-		if (desiredDir != EAST_DIR)
+		switch ((InputValue)lastKeyPress)
 		{
-			player.GetDirection() = desiredDir;
+		case INPUT_A:
+		case INPUT_a:
+			player.GetDirection() = SOUTH_DIR;
+			break;
+		case INPUT_D:
+		case INPUT_d:
+			player.GetDirection() = NORTH_DIR;
+			break;
 		}
 		break;
 	case EAST_DIR:
-		if (desiredDir != WEST_DIR)
+		switch ((InputValue)lastKeyPress)
 		{
-			player.GetDirection() = desiredDir;
+		case INPUT_A:
+		case INPUT_a:
+			player.GetDirection() = NORTH_DIR;
+			break;
+		case INPUT_D:
+		case INPUT_d:
+			player.GetDirection() = SOUTH_DIR;
+			break;
 		}
 		break;
 	case SOUTH_DIR:
-		if (desiredDir != NORTH_DIR)
+		switch ((InputValue)lastKeyPress)
 		{
-			player.GetDirection() = desiredDir;
+		case INPUT_A:
+		case INPUT_a:
+			player.GetDirection() = EAST_DIR;
+			break;
+		case INPUT_D:
+		case INPUT_d:
+			player.GetDirection() = WEST_DIR;
+			break;
 		}
 		break;
-	default:
-		player.GetDirection() = desiredDir;
-		break;
 	}
-	return tookKey;
+	lastKeyPress = ' ';
 }
 
 void Game::OutputQuitMessage()

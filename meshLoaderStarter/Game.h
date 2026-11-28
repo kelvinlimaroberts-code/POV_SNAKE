@@ -84,7 +84,7 @@ private:
 
 	//member function from 
 
-	bool TakeInputKey();		
+	void TakeInputKey();		
 	void OutputQuitMessage();  //needs editing
 	bool GameIsRunning();
 	void FactorCollisions(short2 nextPos);
