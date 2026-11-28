@@ -381,8 +381,6 @@ bool Game::GameIsRunning()
 
 void Game::FactorCollisions(short2 nextPos)
 {
-	Material_t mat; //dedugging mat
-
 	//now check collisions between things
 		//check wall collision
 	switch (map.GetIdentityOfItem(nextPos))
@@ -394,22 +392,6 @@ void Game::FactorCollisions(short2 nextPos)
 		map.AppleEaten() = true;
 		RegenerateApple();
 		++player;
-		
-
-		//debugging. make apple blue if its not registered on the map anymore
-		for (short x = 0; x < gridSize; x++)
-		{
-			for (short y = 0; y < gridSize; y++)
-			{
-				if (map.GetIdentityOfItem({ x,y }) == APPLE)
-				{
-					mat.gfxData.Set(Vector4(0.f, 0.f, 1.f, 0), Vector4(0.f, 0.f, 1.f, 0), Vector4(1, 1, 1, 1)); //blue. error
-					mGameObjects[GameObjectID::ORANGE].SetOverrideMat(&mat);
-				}
-				
-			}
-		}
-
 		break;
 	case SNAKE_BODY:
 		player.HasLife() = false;
@@ -431,12 +413,13 @@ void Game::RegenerateApple()
 {
 	if (map.AppleEaten())
 	{
-		map.UnidentifyItem(applePos);
+		short2 prevPos = applePos;
 		do
 		{
 			GenerateRandomPos(applePos);
 			// make sure that the desired new position for the apple is in an empty spot
 		} while (map.GetIdentityOfItem(applePos) != GridItem::EMPTY);  
+		map.UnidentifyItem(prevPos);
 		map.IdentifyAsItem(APPLE, applePos);
 
 		if (mGameObjects.size() > 0) //check if there is a possible game object to move?
